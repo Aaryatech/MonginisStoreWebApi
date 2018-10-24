@@ -1,6 +1,8 @@
 package com.ats.tril.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.tril.model.GetCurrentStock;
 import com.ats.tril.model.GetItem;
+import com.ats.tril.model.ItemListWithCurrentStock;
 import com.ats.tril.model.MinAndRolLevelReport;
 import com.ats.tril.model.StockDetail;
 import com.ats.tril.model.StockHeader;
 import com.ats.tril.repository.GetItemRepository;
+import com.ats.tril.repository.ItemListWithCurrentStockRepository;
 import com.ats.tril.repository.MinAndRolLevelReportRepository;
 import com.ats.tril.repository.stock.GetCurrentStockHeaderRepository;
 import com.ats.tril.repository.stock.StockDetailRepository;
@@ -40,6 +44,9 @@ public class StockRestController {
 	
 	@Autowired
 	MinAndRolLevelReportRepository minAndRolLevelReportRepository;
+	
+	@Autowired
+	ItemListWithCurrentStockRepository itemListWithCurrentStockRepository;
 
 	@RequestMapping(value = { "/insertStock" }, method = RequestMethod.POST)
 	public @ResponseBody StockHeader insertStock(@RequestBody StockHeader stockHeader) {
@@ -254,6 +261,36 @@ public class StockRestController {
 
 		}
 		return getCurrentStock;
+
+	}
+	
+	@RequestMapping(value = { "/getItemListByCatIdWithStock" }, method = RequestMethod.POST)
+	public @ResponseBody List<ItemListWithCurrentStock> getItemListByCatIdWithStock(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate,@RequestParam("catId") int catId) {
+		
+		List<ItemListWithCurrentStock> list = new ArrayList<>();
+
+		try {
+
+			list = itemListWithCurrentStockRepository.getItemListByCatIdWithStock(fromDate,toDate,catId);
+			
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("dd");
+			 
+			int days =  Integer.parseInt(sf.format(date));
+			for(int i = 0; i < list.size() ; i++) {
+				
+				list.get(i).setClsQty(list.get(i).getOpeningStock()+list.get(i).getApproveQty()-list.get(i).getIssueQty()
+						+list.get(i).getIssueReturnQty()-list.get(i).getDamageQty());
+				list.get(i).setAvgIssueQty(list.get(i).getIssueQty()/days);
+			}
+ 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return list;
 
 	}
 
