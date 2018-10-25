@@ -367,28 +367,17 @@ public class IndentController {
 
 	@RequestMapping(value = { "/editIndentDetail" }, method = RequestMethod.POST)
 	public @ResponseBody ErrorMessage editIndentDetail(@RequestParam("indQty") float indQty,
-			@RequestParam("indDId") int indDId, @RequestParam("schDay") int schDay,
+			@RequestParam("indDId") int indDId, @RequestParam("schDay") String schDate,
 			@RequestParam("remark") String remark, @RequestParam("indentId") int indentId) {
 
 		ErrorMessage err = new ErrorMessage();
 		int response = 0;
 
 		try {
-
-			// IndentTrans indDetail=indentTransRepo.getOne(indDId);
-
-			Indent indResponse = indentRepository.findByIndMId(indentId);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date tempDate = indResponse.getIndMDate();
-			Calendar c = Calendar.getInstance();
-			c.setTime(tempDate); // Now use today date.//before new Date() now tempDate
-			c.add(Calendar.DATE, schDay); // Adding days
-
-			String schDate = sdf.format(c.getTime());
-
-			Date scDate = sdf.parse(schDate);
-			System.err.println("Date  " + schDate);
-			response = indentTransRepo.updateIndentDetail(indQty, indDId, schDay, scDate, remark);
+			
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+ 
+			response = indentTransRepo.updateIndentDetail(indQty, indDId, sf.parse(schDate), remark);
 
 			if (response > 0) {
 
