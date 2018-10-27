@@ -37,6 +37,7 @@ import com.ats.tril.model.Type;
 import com.ats.tril.model.Uom;
 import com.ats.tril.model.User;
 import com.ats.tril.model.Vendor;
+import com.ats.tril.model.VendorListForRateVarification;
 import com.ats.tril.repository.AccountHeadRepository;
 import com.ats.tril.repository.CategoryRepository;
 import com.ats.tril.repository.CompanyRepository;
@@ -60,6 +61,7 @@ import com.ats.tril.repository.TaxFormRepository;
 import com.ats.tril.repository.TypeRepository;
 import com.ats.tril.repository.UomRepository;
 import com.ats.tril.repository.UserRepository;
+import com.ats.tril.repository.VendorListForRateVarificationRepository;
 import com.ats.tril.repository.VendorRepository;
 
 @RestController
@@ -136,6 +138,9 @@ public class MasterController {
 	
 	@Autowired
 	CompanyRepository companyRepository;
+	
+	@Autowired
+	VendorListForRateVarificationRepository vendorListForRateVarificationRepository;
 	
 	@RequestMapping(value = { "/getCompanyDetails" }, method = RequestMethod.GET)
 	public @ResponseBody Company getCompanyDetails() {
@@ -1297,6 +1302,25 @@ public class MasterController {
 
 		}
 		return errorMessage;
+	}
+	
+	
+	@RequestMapping(value = { "/getVendorListByItemIdForRateVerification" }, method = RequestMethod.POST)
+	public @ResponseBody List<VendorListForRateVarification> getVendorListByItemIdForRateVerification(@RequestParam("itemId") int itemId) {
+
+		List<VendorListForRateVarification> vendor = new ArrayList<VendorListForRateVarification>();
+
+		try {
+
+			vendor = vendorListForRateVarificationRepository.getVendorListByItemIdForRateVerification(itemId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return vendor;
+
 	}
 
 	// ----------------Uom --------------------------

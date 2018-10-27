@@ -24,4 +24,6 @@ public interface VendorRepository extends JpaRepository<Vendor, Integer>{
 
 	@Query(value=("select * from m_vendor where vendor_code = (select max(vendor_code) from m_vendor where vendor_code LIKE :str%)"),nativeQuery=true)
 	Vendor getNextVendorNo(@Param("str") String str);
+ 
+	
 }
