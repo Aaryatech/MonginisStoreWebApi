@@ -92,7 +92,7 @@ public class RateVerificationRestController {
 		try {
 
 			 
-			rmVarificationListByVendId = rmRateVerificationListRepo.findByRmIdAndSuppId(vendId);
+			rmVarificationListByVendId = rmRateVerificationListRepo.findStsteCodeTaxPerBySuppId(vendId);
 			 
  
 		} catch (Exception e) {

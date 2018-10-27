@@ -85,6 +85,15 @@ public class GetPODetail {
 	
 	@Column(name = "landing_cost")
 	private float landingCost;
+	
+	@Column(name = "cgst")
+	private float cgst;
+	
+	@Column(name = "sgst")
+	private float sgst;
+	
+	@Column(name = "igst")
+	private float igst;
 
 	private String itemCode;
 	private String itemName;
@@ -270,6 +279,26 @@ public class GetPODetail {
 	public void setPoNo(String poNo) {
 		this.poNo = poNo;
 	}
+	
+	
+	public float getCgst() {
+		return cgst;
+	}
+	public void setCgst(float cgst) {
+		this.cgst = cgst;
+	}
+	public float getSgst() {
+		return sgst;
+	}
+	public void setSgst(float sgst) {
+		this.sgst = sgst;
+	}
+	public float getIgst() {
+		return igst;
+	}
+	public void setIgst(float igst) {
+		this.igst = igst;
+	}
 	@Override
 	public String toString() {
 		return "GetPODetail [poDetailId=" + poDetailId + ", poId=" + poId + ", indId=" + indId + ", vendId=" + vendId
@@ -279,8 +308,8 @@ public class GetPODetail {
 				+ schDate + ", schRemark=" + schRemark + ", status=" + status + ", basicValue=" + basicValue
 				+ ", packValue=" + packValue + ", insu=" + insu + ", otherChargesBefor=" + otherChargesBefor
 				+ ", taxValue=" + taxValue + ", freightValue=" + freightValue + ", otherChargesAfter="
-				+ otherChargesAfter + ", landingCost=" + landingCost + ", itemCode=" + itemCode + ", itemName="
-				+ itemName + ", uom=" + uom + ", poNo=" + poNo + "]";
+				+ otherChargesAfter + ", landingCost=" + landingCost + ", cgst=" + cgst + ", sgst=" + sgst + ", igst="
+				+ igst + ", itemCode=" + itemCode + ", itemName=" + itemName + ", uom=" + uom + ", poNo=" + poNo + "]";
 	}
 	
 }

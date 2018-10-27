@@ -95,6 +95,15 @@ public class GetPoDetailList {
 	
 	@Column(name = "item_code")
 	private String itemCode;
+	
+	@Column(name = "cgst")
+	private float cgst;
+	
+	@Column(name = "sgst")
+	private float sgst;
+	
+	@Column(name = "igst")
+	private float igst;
 
 	public int getPoDetailId() {
 		return poDetailId;
@@ -312,6 +321,30 @@ public class GetPoDetailList {
 		this.itemCode = itemCode;
 	}
 
+	public float getCgst() {
+		return cgst;
+	}
+
+	public void setCgst(float cgst) {
+		this.cgst = cgst;
+	}
+
+	public float getSgst() {
+		return sgst;
+	}
+
+	public void setSgst(float sgst) {
+		this.sgst = sgst;
+	}
+
+	public float getIgst() {
+		return igst;
+	}
+
+	public void setIgst(float igst) {
+		this.igst = igst;
+	}
+
 	@Override
 	public String toString() {
 		return "GetPoDetailList [poDetailId=" + poDetailId + ", poId=" + poId + ", indId=" + indId + ", vendId="
@@ -322,7 +355,7 @@ public class GetPoDetailList {
 				+ basicValue + ", packValue=" + packValue + ", insu=" + insu + ", otherChargesBefor="
 				+ otherChargesBefor + ", taxValue=" + taxValue + ", freightValue=" + freightValue
 				+ ", otherChargesAfter=" + otherChargesAfter + ", landingCost=" + landingCost + ", itemCode=" + itemCode
-				+ "]";
+				+ ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst + "]";
 	}
 	
 	
