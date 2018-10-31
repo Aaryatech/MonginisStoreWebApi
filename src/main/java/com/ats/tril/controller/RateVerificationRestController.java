@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ats.tril.common.DateConvertor;
-import com.ats.tril.model.RmRateVerificationList; 
-import com.ats.tril.repository.RmRateVerificationListRepo; 
+import com.ats.tril.common.DateConvertor; 
+import com.ats.tril.model.GetRmRateVerificationRecord;
+import com.ats.tril.model.RmRateVerificationList;
+import com.ats.tril.model.RmRateVerificationRecord;
+import com.ats.tril.repository.GetRmRateVerificationRecordRepo;
+import com.ats.tril.repository.RmRateVerificationListRepo;
+import com.ats.tril.repository.RmRateVerificationRecordRepo; 
 
 @RestController
 public class RateVerificationRestController {
@@ -23,6 +27,12 @@ public class RateVerificationRestController {
 	 @Autowired
 	 RmRateVerificationListRepo rmRateVerificationListRepo;
 	
+	 @Autowired
+	 RmRateVerificationRecordRepo rmRateVerificationRecordRepo;
+	 
+	 @Autowired
+	 GetRmRateVerificationRecordRepo getRmRateVerificationRecordRepo;
+	 
 	@RequestMapping(value = { "/saveRmRateVarification" }, method = RequestMethod.POST)
 	public @ResponseBody RmRateVerificationList  saveRmRateVarification(@RequestBody RmRateVerificationList rmRateVerification) {
  
@@ -104,5 +114,80 @@ public class RateVerificationRestController {
 		return rmVarificationListByVendId;
 
 	} 
+	
+	@RequestMapping(value = { "/saveRateVarificationRecord" }, method = RequestMethod.POST)
+	public @ResponseBody RmRateVerificationRecord saveRateVarificationRecord(@RequestBody RmRateVerificationRecord rmRateVerificationRecord) {
+ 
+		RmRateVerificationRecord save = new RmRateVerificationRecord();
 
+		try {
+ 
+			save = rmRateVerificationRecordRepo.save(rmRateVerificationRecord);
+ 
+		} catch (Exception e) {
+ 
+			e.printStackTrace();
+
+		}
+
+		return save;
+
+	} 
+	
+	@RequestMapping(value = { "/getRateVerificationRecordList" }, method = RequestMethod.GET)
+	public @ResponseBody List<GetRmRateVerificationRecord> getRateVerificationRecordList() {
+ 
+		List<GetRmRateVerificationRecord> list = new ArrayList<GetRmRateVerificationRecord>();
+
+		try {
+
+			 
+			list = getRmRateVerificationRecordRepo.getRateVerificationRecordList();
+			 
+ 
+		} catch (Exception e) {
+ 
+			e.printStackTrace();
+			 
+		}
+
+		return list;
+
+	}
+	
+	@RequestMapping(value = { "/getRateVerificationRecordListDateWise" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetRmRateVerificationRecord> getRateVerificationRecordListDateWise(@RequestParam("itemId") int itemId,
+			@RequestParam("vendId") int vendId,@RequestParam("fromDate") String fromDate,@RequestParam("toDate") String toDate) {
+ 
+		List<GetRmRateVerificationRecord> list = new ArrayList<GetRmRateVerificationRecord>();
+
+		try {
+
+			if(vendId!=0 && itemId!=0) {
+				
+				list = getRmRateVerificationRecordRepo.getRateVerificationRecordListByVendIdAndItemId(fromDate,toDate,vendId,itemId);
+			}else if(vendId!=0 && itemId==0) {
+				
+				list = getRmRateVerificationRecordRepo.getRateVerificationRecordListByVendId(fromDate,toDate,vendId);
+			}else if(vendId==0 && itemId!=0) {
+				
+				list = getRmRateVerificationRecordRepo.getRateVerificationRecordListByItemId(fromDate,toDate,itemId);
+			}else {
+				
+				list = getRmRateVerificationRecordRepo.getRateVerificationRecordListByDate(fromDate,toDate);
+			}
+			
+			
+			 
+ 
+		} catch (Exception e) {
+ 
+			e.printStackTrace();
+			 
+		}
+
+		return list;
+
+	}
+ 
 }
