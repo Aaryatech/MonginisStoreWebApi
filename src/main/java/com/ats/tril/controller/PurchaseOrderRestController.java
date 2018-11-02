@@ -241,8 +241,7 @@ public class PurchaseOrderRestController {
 
 			else if (!vendorIdList.contains(0) && !poTypeList.contains(0) && poStatus.contains(-1)) {
 
-				list = getPoHeaderListRepository.getPoHeaderByVendorAndPoTypeList(fromDate, toDate, vendorIdList,
-						poTypeList);
+				list = getPoHeaderListRepository.getPoHeaderByVendorAndPoTypeList(fromDate, toDate, poTypeList);
 			}
 
 			else {

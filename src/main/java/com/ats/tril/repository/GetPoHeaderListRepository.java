@@ -40,10 +40,9 @@ public interface GetPoHeaderListRepository extends JpaRepository<GetPoHeaderList
 	List<GetPoHeaderList> getPoHeaderByVendor(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("vendorIdList") List<Integer> vendorIdList);
 
-	@Query(value = " select p.*,v.vendor_name from po_header p,m_vendor v where p.po_date between :fromDate and :toDate and del_status=1 and v.vendor_id =p.vend_id   AND p.po_type IN(:poTypeList)  AND p.vend_id IN(:vendorIdList)", nativeQuery = true)
+	@Query(value = " select p.*,v.vendor_name from po_header p,m_vendor v where p.po_date between :fromDate and :toDate and del_status=1 and v.vendor_id =p.vend_id   AND p.po_type IN(:poTypeList) ", nativeQuery = true)
 	List<GetPoHeaderList> getPoHeaderByVendorAndPoTypeList(@Param("fromDate") String fromDate,
-			@Param("toDate") String toDate, @Param("poTypeList") List<Integer> poTypeList,
-			@Param("vendorIdList") List<Integer> vendorIdList);
+			@Param("toDate") String toDate, @Param("poTypeList") List<Integer> poTypeList );
 
 	@Query(value = " select p.*,v.vendor_name from po_header p,m_vendor v where   p.del_status=1 and v.vendor_id =p.vend_id and p.po_status in (:status)", nativeQuery = true)
 	List<GetPoHeaderList> getPoHeaderListForApprove(@Param("status") List<Integer> status);
