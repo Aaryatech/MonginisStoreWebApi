@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.tril.common.DateConvertor; 
 import com.ats.tril.model.GetRmRateVerificationRecord;
+import com.ats.tril.model.ItemListByRateVerification;
 import com.ats.tril.model.RmRateVerificationList;
 import com.ats.tril.model.RmRateVerificationRecord;
 import com.ats.tril.repository.GetRmRateVerificationRecordRepo;
+import com.ats.tril.repository.ItemListByRateVerificationRepo;
 import com.ats.tril.repository.RmRateVerificationListRepo;
 import com.ats.tril.repository.RmRateVerificationRecordRepo; 
 
@@ -32,6 +34,9 @@ public class RateVerificationRestController {
 	 
 	 @Autowired
 	 GetRmRateVerificationRecordRepo getRmRateVerificationRecordRepo;
+	 
+	 @Autowired
+	 ItemListByRateVerificationRepo itemListByRateVerificationRepo;
 	 
 	@RequestMapping(value = { "/saveRmRateVarification" }, method = RequestMethod.POST)
 	public @ResponseBody RmRateVerificationList  saveRmRateVarification(@RequestBody RmRateVerificationList rmRateVerification) {
@@ -178,6 +183,28 @@ public class RateVerificationRestController {
 			}
 			
 			
+			 
+ 
+		} catch (Exception e) {
+ 
+			e.printStackTrace();
+			 
+		}
+
+		return list;
+
+	}
+	
+	@RequestMapping(value = { "/getItemListByVendId" }, method = RequestMethod.POST)
+	public @ResponseBody List<ItemListByRateVerification> getItemListByVendId( 
+			@RequestParam("vendId") int vendId ) {
+ 
+		List<ItemListByRateVerification> list = new ArrayList<ItemListByRateVerification>();
+
+		try {
+
+			 
+				list = itemListByRateVerificationRepo.getRateVerificationItemListByVendId(vendId);
 			 
  
 		} catch (Exception e) {

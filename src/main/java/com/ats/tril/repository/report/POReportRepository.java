@@ -11,8 +11,31 @@ import com.ats.tril.model.report.POReport;
 
 public interface POReportRepository extends JpaRepository<POReport, Integer> {
 
-	@Query(value = "SELECT h.*,v.vendor_name,v.vendor_code,v.vendor_add1,v.vendor_gst_no,x.tax_desc ,t.delivery_desc ,dp.disp_mode_desc ,pt.pymt_desc,id.ind_m_date FROM po_header h ,m_vendor v,m_tax_form x,m_delivery_terms t,m_dispatch_mode dp ,m_payment_terms pt,indent id WHERE h.po_id IN(:poIdList) AND h.del_status=1 AND v.vendor_id=h.vend_id AND x.tax_id=h.po_tax_id AND t.delivery_term_id=h.delivery_id AND h.dispatch_id=dp.disp_mode_id AND h.payment_term_id=pt.pymt_term_id and id.ind_m_id = h.ind_id "
-			+ "", nativeQuery = true)
+	@Query(value = "SELECT\r\n" + 
+			"        h.*,\r\n" + 
+			"        v.vendor_name,\r\n" + 
+			"        v.vendor_code,\r\n" + 
+			"        v.vendor_add1,\r\n" + 
+			"        v.vendor_gst_no, \r\n" + 
+			"        t.delivery_desc ,\r\n" + 
+			"        dp.disp_mode_desc ,\r\n" + 
+			"        pt.pymt_desc,\r\n" + 
+			"        id.ind_m_date,0 as tax_desc \r\n" + 
+			"    FROM\r\n" + 
+			"        po_header h ,\r\n" + 
+			"        m_vendor v, \r\n" + 
+			"        m_delivery_terms t,\r\n" + 
+			"        m_dispatch_mode dp ,\r\n" + 
+			"        m_payment_terms pt,\r\n" + 
+			"        indent id \r\n" + 
+			"    WHERE\r\n" + 
+			"        h.po_id IN(:poIdList) \r\n" + 
+			"        AND h.del_status=1 \r\n" + 
+			"        AND v.vendor_id=h.vend_id  \r\n" + 
+			"        AND t.delivery_term_id=h.delivery_id \r\n" + 
+			"        AND h.dispatch_id=dp.disp_mode_id \r\n" + 
+			"        AND h.payment_term_id=pt.pymt_term_id \r\n" + 
+			"        and id.ind_m_id = h.ind_id ", nativeQuery = true)
 	List<POReport> getPOReportHeaderList(@Param("poIdList") List<Integer> poIdList);
 
 }
