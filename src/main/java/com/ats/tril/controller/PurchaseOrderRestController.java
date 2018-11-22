@@ -19,12 +19,14 @@ import com.ats.tril.model.GetPoDetailList;
 import com.ats.tril.model.GetPoHeaderList;
 import com.ats.tril.model.PoDetail;
 import com.ats.tril.model.PoHeader;
+import com.ats.tril.model.Vendor;
 import com.ats.tril.model.getqueryitems.GetPoQueryItem;
 import com.ats.tril.model.indent.IndentTrans;
 import com.ats.tril.repository.GetPoDetailListRepository;
 import com.ats.tril.repository.GetPoHeaderListRepository;
 import com.ats.tril.repository.PoDetailRepository;
 import com.ats.tril.repository.PoHeaderRepository;
+import com.ats.tril.repository.VendorRepository;
 import com.ats.tril.repository.getpodetail.GetPODetailRepo;
 import com.ats.tril.repository.indent.IndentTransRepo;
 import com.ats.tril.repository.queryitems.GetPoQueryItemRepo;
@@ -52,6 +54,9 @@ public class PurchaseOrderRestController {
 	
 	@Autowired
 	GetPoQueryItemRepo getPoQueryItemRepo;
+	
+	@Autowired
+	VendorRepository vendorRepository;
 
 	@RequestMapping(value = { "/getPODetailList" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetPODetail> getPODetails(@RequestParam("poIdList") List<Integer> poIdList) {
@@ -328,6 +333,22 @@ public class PurchaseOrderRestController {
 
 		}
 		return errorMessage;
+
+	}
+	
+	@RequestMapping(value = { "/getVendorByIndendId" }, method = RequestMethod.POST)
+	public @ResponseBody List<Vendor> getVendorByIndendId(@RequestParam("indId") int indId) {
+
+		List<Vendor> vendor = new ArrayList<>();
+		try {
+			vendor = vendorRepository.getVendorByIndendId(indId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return vendor;
 
 	}
 
