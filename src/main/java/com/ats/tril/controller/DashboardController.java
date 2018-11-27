@@ -89,7 +89,7 @@ public class DashboardController {
 		try {
 
 			 
-			poHeaderList = getPoHeaderRepository.findByPoTypeAndPoStatusAndDelStatus(poType, status);
+			poHeaderList = getPoHeaderRepository.findByPoTypeAndPoStatusAndDelStatus();
 				
 
 		} catch (Exception e) {
