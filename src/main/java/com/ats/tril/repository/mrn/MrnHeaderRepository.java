@@ -55,7 +55,11 @@ public interface MrnHeaderRepository extends JpaRepository<MrnHeader, Integer>{
 
 	@Query(value=("select i.achd_id from indent i,po_header po where po.po_id=:poId and po.ind_id=i.ind_m_id"),nativeQuery=true) 
 	String getAccHead(@Param("poId") int poId);
-	
+ 
+	@Transactional
+	@Modifying
+	@Query("UPDATE MrnHeader SET mrn_status=:status  WHERE mrn_id=:mrnId ")
+	int updateheaderStatus(@Param("mrnId")int mrnId,@Param("status")int status);
 
 
 }

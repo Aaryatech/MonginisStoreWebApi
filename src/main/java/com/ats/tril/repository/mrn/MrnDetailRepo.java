@@ -31,10 +31,10 @@ public interface MrnDetailRepo extends JpaRepository<MrnDetail, Integer> {
 			"    where\n" + 
 			"        md.item_id=:itemId\n" + 
 			"        and md.del_status=1\n" + 
-			"        and md.mrn_detail_status=4\n" + 
+			"        and md.mrn_detail_status>=4\n" + 
 			"        and mh.mrn_date<=:date\n" + 
-			"        and mh.mrn_id=md.mrn_id and mh.mrn_type=:type",nativeQuery=true)
-	List<MrnDetail> findByItemIdAndDelStatusAndMrnDetailStatus(@Param("itemId")int itemId,@Param("type")int type,
+			"        and mh.mrn_id=md.mrn_id ",nativeQuery=true)
+	List<MrnDetail> findByItemIdAndDelStatusAndMrnDetailStatus(@Param("itemId")int itemId ,
 			@Param("date")String date);
 
 	@Query(value="select * from t_mrn_detail where mrn_detail_id in (:mrnDetailList) and del_status=1",nativeQuery=true)
@@ -49,5 +49,7 @@ public interface MrnDetailRepo extends JpaRepository<MrnDetail, Integer> {
 	@Modifying
 	@Query("UPDATE MrnDetail SET mrnDetailStatus=:status WHERE mrn_detail_id IN (:mrnDetalId)")
 	int updateStatusWhileApprov(@Param("mrnDetalId")List<Integer> mrnDetalId,@Param("status") int status);
+
+	List<MrnDetail> findByMrnIdAndDelStatus(int mrnId, int i);
 	
 }

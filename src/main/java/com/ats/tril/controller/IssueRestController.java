@@ -19,12 +19,14 @@ import com.ats.tril.model.IssueHeader;
 import com.ats.tril.model.indent.Indent;
 import com.ats.tril.model.indent.IndentTrans;
 import com.ats.tril.model.mrn.MrnDetail;
+import com.ats.tril.model.mrn.MrnHeader;
 import com.ats.tril.repository.GetIssueDetailRepository;
 import com.ats.tril.repository.GetIssueHeaderRepository;
 import com.ats.tril.repository.IssueDetailRepository;
 import com.ats.tril.repository.IssueHeaderRepository;
 import com.ats.tril.repository.indent.IndentTransRepo;
 import com.ats.tril.repository.mrn.MrnDetailRepo;
+import com.ats.tril.repository.mrn.MrnHeaderRepository;
 
 @RestController
 public class IssueRestController {
@@ -44,6 +46,9 @@ public class IssueRestController {
 	
 	@Autowired
 	MrnDetailRepo mrnDetailRepo;
+	
+	@Autowired
+	MrnHeaderRepository mrnHeaderRepository;
 	
 	@RequestMapping(value = { "/saveIssueHeaderAndDetail" }, method = RequestMethod.POST)
 	public @ResponseBody IssueHeader saveIssueHeaderAndDetail(@RequestBody IssueHeader issueHeader) {
@@ -148,7 +153,7 @@ public class IssueRestController {
 
 		try {
  
-			indTransList = mrnDetailRepo.findByItemIdAndDelStatusAndMrnDetailStatus(itemId,type,date); 
+			indTransList = mrnDetailRepo.findByItemIdAndDelStatusAndMrnDetailStatus(itemId, date); 
 
 		} catch (Exception e) {
   
@@ -187,6 +192,28 @@ public class IssueRestController {
 		try {
  
 			mrnDetails = mrnDetailRepo.saveAll(mrnDetailList); 
+			List<Integer> mrnIds = new ArrayList<Integer>();
+			
+			for(int i=0 ; i<mrnDetailList.size() ; i++) {
+				
+				mrnIds.add(mrnDetailList.get(i).getMrnId());
+				List<MrnDetail> mrnDetailsForUpdate = mrnDetailRepo.findByMrnIdAndDelStatus(mrnDetailList.get(i).getMrnId(),1);
+				
+				int status=4;
+				
+				for(int j=0 ; j<mrnDetailsForUpdate.size() ; j++) {
+					
+					if(mrnDetailsForUpdate.get(j).getMrnDetailStatus()==5) {
+						status=5;
+						break;
+					}
+				 
+				}
+				
+				int updateheaderStatus = mrnHeaderRepository.updateheaderStatus(mrnDetailList.get(i).getMrnId(),status);
+			}
+			
+			
 
 		} catch (Exception e) {
   
