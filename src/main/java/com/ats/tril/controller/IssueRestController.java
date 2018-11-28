@@ -203,7 +203,7 @@ public class IssueRestController {
 				
 				for(int j=0 ; j<mrnDetailsForUpdate.size() ; j++) {
 					
-					if(mrnDetailsForUpdate.get(j).getMrnDetailStatus()==5) {
+					if(mrnDetailsForUpdate.get(j).getChalanQty()==1) {
 						status=5;
 						break;
 					}
