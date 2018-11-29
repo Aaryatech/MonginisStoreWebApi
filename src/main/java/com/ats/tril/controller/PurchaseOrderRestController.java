@@ -1,5 +1,6 @@
 package com.ats.tril.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,9 +90,25 @@ public class PurchaseOrderRestController {
 		List<PoHeader> poHeaderList = new ArrayList<PoHeader>();
 
 		try {
+			
+			SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
 
 			poHeaderList = poHeaderRepository.findByVendIdAndDelStatusAndPoTypeAndPoStatusIn(vendId, delStatus, poType,
 					statusList);
+			
+			for(int i =0 ; i<poHeaderList.size() ; i++) {
+				
+				List<Date> schDate = poHeaderRepository.getschDate(poHeaderList.get(i).getPoId());
+				
+				System.out.println(schDate);
+				try {
+					
+					 poHeaderList.get(i).setOtherChargeBeforeRemark(sf.format(schDate.get(0)));
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
 
 		} catch (Exception e) {
 

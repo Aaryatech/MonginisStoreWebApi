@@ -1,5 +1,6 @@
 package com.ats.tril.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,6 +33,9 @@ public interface PoHeaderRepository extends JpaRepository<PoHeader, Integer>{
 	@Modifying
 	@Query(" UPDATE PoHeader  SET poStatus=:status   WHERE poId=:poId ")
 	int updateStatusWhileApprov(@Param("poId")int poId,@Param("status") int status);
+
+	@Query(value = "select sch_date from po_detail where po_id =:poId", nativeQuery = true)
+	List<Date> getschDate(@Param("poId") int poId);
 	
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
