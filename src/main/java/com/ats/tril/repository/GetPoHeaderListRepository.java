@@ -47,4 +47,20 @@ public interface GetPoHeaderListRepository extends JpaRepository<GetPoHeaderList
 	@Query(value = " select p.*,v.vendor_name from po_header p,m_vendor v where   p.del_status=1 and v.vendor_id =p.vend_id and p.po_status in (:status)", nativeQuery = true)
 	List<GetPoHeaderList> getPoHeaderListForApprove(@Param("status") List<Integer> status);
 
+	
+	@Query(value = "select\r\n" + 
+			"        p.*,\r\n" + 
+			"        v.vendor_name \r\n" + 
+			"    from\r\n" + 
+			"        po_header p,\r\n" + 
+			"        m_vendor v,\r\n" + 
+			"        indent i\r\n" + 
+			"    where\r\n" + 
+			"        p.po_date between :fromDate and :toDate\r\n" + 
+			"        and p.del_status=1 \r\n" + 
+			"        and v.vendor_id =p.vend_id  and p.ind_id=i.ind_m_id\r\n" + 
+			"        and i.cat_id=:catId", nativeQuery = true)
+	List<GetPoHeaderList> getPoHeaderListBetweenDateAndCatId(@Param("fromDate") String fromDate,
+			@Param("toDate") String toDate,@Param("catId") int catId);
+
 }

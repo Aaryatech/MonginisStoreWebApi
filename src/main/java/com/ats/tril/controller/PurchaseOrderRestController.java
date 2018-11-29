@@ -159,13 +159,23 @@ public class PurchaseOrderRestController {
 
 	@RequestMapping(value = { "/getPoHeaderListBetweenDate" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetPoHeaderList> getPoHeaderListBetweenDate(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate) {
+			@RequestParam("toDate") String toDate,@RequestParam("catId") int catId) {
 
 		List<GetPoHeaderList> list = new ArrayList<GetPoHeaderList>();
 
 		try {
+			
+			
+			if(catId!=0) {
+				
+				list = getPoHeaderListRepository.getPoHeaderListBetweenDateAndCatId(fromDate, toDate, catId);
+			}
+			else {
+				
+				list = getPoHeaderListRepository.getPoHeaderListBetweenDate(fromDate, toDate);
+			}
 
-			list = getPoHeaderListRepository.getPoHeaderListBetweenDate(fromDate, toDate);
+			
 
 		} catch (Exception e) {
 
