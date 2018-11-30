@@ -82,14 +82,14 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = { "/getPoHeaderDashList" }, method = RequestMethod.POST)
-	public @ResponseBody List<GetPoHeader> getPOHeaderList(@RequestParam("poType") int poType,@RequestParam("status") int status) {
+	public @ResponseBody List<GetPoHeader> getPOHeaderList(@RequestParam("poType") int poType,@RequestParam("status") List<Integer> status) {
 
 		List<GetPoHeader> poHeaderList = new ArrayList<GetPoHeader>();
 
 		try {
 
 			 
-			poHeaderList = getPoHeaderRepository.findByPoTypeAndPoStatusAndDelStatus();
+			poHeaderList = getPoHeaderRepository.findByPoTypeAndPoStatusAndDelStatus(status);
 				
 
 		} catch (Exception e) {

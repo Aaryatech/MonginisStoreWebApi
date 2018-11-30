@@ -275,5 +275,69 @@ public class IssueRestController {
 
 	}
 	
+	@RequestMapping(value = { "/generateIssueNoAndMrnNo" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage generateIssueNoAndMrnNo(@RequestParam("docType") int docType,
+		 @RequestParam("date") String date) {
+
+		ErrorMessage errorMessage = new ErrorMessage();
+
+		try {
+			String recptNo = new String();
+			
+			if(docType==1) {
+				
+				recptNo = issueHeaderRepository.generateMrnNo(date); 
+			}
+			else {
+				
+				recptNo = issueHeaderRepository.generateIssueNo(date); 
+			}
+
+			String[] monthAndYear = date.split("-");
+			if(recptNo==null) {
+				
+				if(docType==1) {
+					recptNo="MRN-"+monthAndYear[0].substring(2, monthAndYear[0].length())+"-"+monthAndYear[1]+"-"+monthAndYear[2]+"-0001";
+				}
+				else {
+					recptNo="IS-"+monthAndYear[0].substring(2, monthAndYear[0].length())+"-"+monthAndYear[1]+"-"+monthAndYear[2]+"-0001";
+				}
+			}
+			else {
+				String[] splNo = recptNo.split("-");
+				int maxNo=Integer.parseInt(splNo[splNo.length-1]);
+				
+				maxNo=maxNo+1;
+				 
+				String finalNo = new String();
+				for(int i=String.valueOf(maxNo).length() ; i<4 ; i++) {
+					 
+					finalNo=finalNo+"0";
+				}
+				finalNo=finalNo+String.valueOf(maxNo);
+				
+				if(docType==1) {
+					recptNo="MRN-"+monthAndYear[0].substring(2, monthAndYear[0].length())+"-"+monthAndYear[1]+"-"+monthAndYear[2]+"-"+finalNo;
+				}
+				else {
+					recptNo="IS-"+monthAndYear[0].substring(2, monthAndYear[0].length())+"-"+monthAndYear[1]+"-"+monthAndYear[2]+"-"+finalNo;
+				}
+			}
+			System.out.println("recptNo " + recptNo);
+			errorMessage.setError(false);
+			errorMessage.setMessage(recptNo);
+			 
+			 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			errorMessage.setError(true);
+			errorMessage.setMessage("failed");
+
+		}
+		return errorMessage;
+
+	}
+	/*select mrn_no from t_mrn_header where mrn_id=(select max(mrn_id) from t_mrn_header where mrn_date="2018-11-28")*/
 
 }
