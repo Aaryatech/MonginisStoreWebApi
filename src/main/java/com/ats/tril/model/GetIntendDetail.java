@@ -156,7 +156,7 @@ public class GetIntendDetail {
 	public void setIndItemSchd(int indItemSchd) {
 		this.indItemSchd = indItemSchd;
 	}
-
+	@JsonFormat(locale = "hi", timezone = "Asia/Kolkata", pattern = "yyyy-MM-dd")
 	public Date getIndItemSchddt() {
 		return indItemSchddt;
 	}

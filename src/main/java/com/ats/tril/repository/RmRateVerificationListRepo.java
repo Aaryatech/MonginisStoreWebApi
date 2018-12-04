@@ -40,7 +40,7 @@ public interface RmRateVerificationListRepo extends JpaRepository<RmRateVerifica
 			"        and i.item_id=rv.rm_id\r\n" + 
 			"        and tf.tax_id=i.item_is_capital\r\n" + 
 			"        and v.vendor_id=rv.supp_id \r\n" + 
-			"        and v.vendor_state_id = s.state_id", nativeQuery = true)
+			"        and v.vendor_state_id = s.state_id and i.is_used=1", nativeQuery = true)
 	List<RmRateVerificationList> findStsteCodeTaxPerBySuppId(@Param("vendId")int vendId);
 
 }
