@@ -25,6 +25,7 @@ import com.ats.tril.model.IssueAndMrnGroupWise;
 import com.ats.tril.model.IssueAndMrnItemWise;
 import com.ats.tril.model.IssueDeptWise;
 import com.ats.tril.model.IssueMonthWiseList;
+import com.ats.tril.model.ItemExpectedReport;
 import com.ats.tril.model.ItemQtyWithRecieptNo;
 import com.ats.tril.model.ItemValuationList;
 import com.ats.tril.model.MonthCategoryWiseMrnReport;
@@ -33,6 +34,7 @@ import com.ats.tril.model.MonthItemWiseMrnReportRepository;
 import com.ats.tril.model.MonthSubDeptWiseIssueReport;
 import com.ats.tril.model.MonthWiseIssueReport;
 import com.ats.tril.model.MrnMonthWiseList;
+import com.ats.tril.model.ShortItemReport;
 import com.ats.tril.model.StockValuationCategoryWise;
 import com.ats.tril.model.Type;
 import com.ats.tril.model.doc.SubDocument;
@@ -42,10 +44,12 @@ import com.ats.tril.repository.IndentValueLimitRepository;
 import com.ats.tril.repository.IssueAndMrnGroupWiseRepository;
 import com.ats.tril.repository.IssueAndMrnItemWiseRepository;
 import com.ats.tril.repository.IssueDeptWiseRepository;
+import com.ats.tril.repository.ItemExpectedReportRepository;
 import com.ats.tril.repository.ItemQtyWithRecieptNoRepository;
 import com.ats.tril.repository.MonthCategoryWiseMrnReportRepository;
 import com.ats.tril.repository.MonthSubDeptWiseIssueRepository;
 import com.ats.tril.repository.MonthWiseIssueRepository;
+import com.ats.tril.repository.ShortItemReportRepository;
 import com.ats.tril.repository.StockValuationCategoryWiseRepository;
 import com.ats.tril.repository.TypeRepository;
 import com.ats.tril.repository.doc.DocumentBeanRepository; 
@@ -94,6 +98,12 @@ public class ValueationRestController {
 	
 	@Autowired
 	IndentStatusReportRepository indentStatusReportRepository;
+	
+	@Autowired
+	ItemExpectedReportRepository itemExpectedReportRepository;
+	
+	@Autowired
+	ShortItemReportRepository shortItemReportRepository;
 	
 	@RequestMapping(value = { "/valueationReportDetail" }, method = RequestMethod.POST)
 	public @ResponseBody List<ItemValuationList> valueationReportDetail(@RequestParam("fromDate") String fromDate,
@@ -1027,5 +1037,39 @@ public class ValueationRestController {
 			return indentPendig;
 
 		}
+	 
+	 @RequestMapping(value = { "/getItemExpectedReportBetweenDate" }, method = RequestMethod.POST)
+		public @ResponseBody List<ItemExpectedReport> getItemExpectedReportBetweenDate(@RequestParam("fromDate") String fromDate,
+				@RequestParam("toDate") String toDate ,@RequestParam("status") List<Integer> status) {
+
+			 List<ItemExpectedReport> list = new ArrayList<ItemExpectedReport>();
+			try {
+				 
+				 list = itemExpectedReportRepository.getItemExpectedReportBetweenDate(fromDate,toDate,status); 
+
+			} catch (Exception e) {
+				 
+				e.printStackTrace(); 
+			}
+			return list;
+
+		}
+	 
+	 @RequestMapping(value = { "/getShortItemReportBetweenDate" }, method = RequestMethod.POST)
+		public @ResponseBody List<ShortItemReport> getShortItemReportBetweenDate(@RequestParam("fromDate") String fromDate,
+				@RequestParam("toDate") String toDate ) {
+
+			 List<ShortItemReport> list = new ArrayList<ShortItemReport>();
+			try {
+				 
+				 list = shortItemReportRepository.getShortItemReportBetweenDate(fromDate,toDate); 
+
+			} catch (Exception e) {
+				 
+				e.printStackTrace(); 
+			}
+			return list;
+
+		} 
 
 }
