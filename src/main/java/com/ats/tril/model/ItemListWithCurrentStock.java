@@ -57,6 +57,9 @@ public class ItemListWithCurrentStock {
 	@Column(name = "po_pending")
 	private float poPending; 
 	
+	@Column(name = "item_op_qty")
+	private float itemopQty; 
+	
 	@Transient
 	private float avgIssueQty; 
 	
@@ -199,13 +202,22 @@ public class ItemListWithCurrentStock {
 		this.rolLevel = rolLevel;
 	}
 
+	public float getItemopQty() {
+		return itemopQty;
+	}
+
+	public void setItemopQty(float itemopQty) {
+		this.itemopQty = itemopQty;
+	}
+
 	@Override
 	public String toString() {
 		return "ItemListWithCurrentStock [itemId=" + itemId + ", itemCode=" + itemCode + ", catId=" + catId + ", grpId="
 				+ grpId + ", itemUom=" + itemUom + ", itemDesc=" + itemDesc + ", minLevel=" + minLevel + ", maxLevel="
 				+ maxLevel + ", rolLevel=" + rolLevel + ", openingStock=" + openingStock + ", approveQty=" + approveQty
 				+ ", issueQty=" + issueQty + ", issueReturnQty=" + issueReturnQty + ", damageQty=" + damageQty
-				+ ", poPending=" + poPending + ", avgIssueQty=" + avgIssueQty + ", clsQty=" + clsQty + "]";
+				+ ", poPending=" + poPending + ", itemopQty=" + itemopQty + ", avgIssueQty=" + avgIssueQty + ", clsQty="
+				+ clsQty + "]";
 	}
  
 	

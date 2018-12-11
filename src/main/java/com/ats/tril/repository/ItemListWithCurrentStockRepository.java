@@ -20,7 +20,7 @@ public interface ItemListWithCurrentStockRepository extends JpaRepository<ItemLi
 			"        m_item.item_uom,\r\n" + 
 			"        m_item.item_min_level as min_level,\r\n" + 
 			"        m_item.item_max_level as max_level,\r\n" + 
-			"        m_item.item_rod_level as rol_level,\r\n" + 
+			"        m_item.item_rod_level as rol_level,m_item.item_op_qty as item_op_qty,\r\n" + 
 			"        coalesce((Select\r\n" + 
 			"            SUM(t_stock_detail.op_stock_qty) \r\n" + 
 			"        FROM\r\n" + 
