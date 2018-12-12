@@ -293,5 +293,35 @@ public class StockRestController {
 		return list;
 
 	}
+	
+	@RequestMapping(value = { "/getItemListByItemIdWithStock" }, method = RequestMethod.POST)
+	public @ResponseBody  ItemListWithCurrentStock  getItemListByItemIdWithStock(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate,@RequestParam("itemId") int itemId) {
+		
+		 ItemListWithCurrentStock  itemListWithCurrentStock = new ItemListWithCurrentStock();
+
+		try {
+
+			itemListWithCurrentStock = itemListWithCurrentStockRepository.getItemListByItemIdWithStock(fromDate,toDate,itemId);
+			
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("dd");
+			 
+			int days =  Integer.parseInt(sf.format(date));
+			 
+				
+			itemListWithCurrentStock.setClsQty(itemListWithCurrentStock.getOpeningStock()+itemListWithCurrentStock.getApproveQty()-itemListWithCurrentStock.getIssueQty()
+						+itemListWithCurrentStock.getIssueReturnQty()-itemListWithCurrentStock.getDamageQty());
+			itemListWithCurrentStock.setAvgIssueQty(itemListWithCurrentStock.getIssueQty()/days);
+			 
+ 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return itemListWithCurrentStock;
+
+	}
 
 }
