@@ -272,17 +272,23 @@ public class StockRestController {
 
 		try {
 
-			list = itemListWithCurrentStockRepository.getItemListByCatIdWithStock(fromDate,toDate,catId);
-			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("dd");
-			 
+			SimpleDateFormat yy = new SimpleDateFormat("yyyy");
+			SimpleDateFormat mm = new SimpleDateFormat("MM");
+			
 			int days =  Integer.parseInt(sf.format(date));
+			String year =   yy.format(date);
+			int month =  Integer.parseInt(mm.format(date));
+			String firstDate = year+"-"+month+"-01";
+			
+			list = itemListWithCurrentStockRepository.getItemListByCatIdWithStock(firstDate,fromDate,toDate,catId);
+			 
 			for(int i = 0; i < list.size() ; i++) {
 				
 				list.get(i).setClsQty(list.get(i).getOpeningStock()+list.get(i).getApproveQty()-list.get(i).getIssueQty()
 						+list.get(i).getIssueReturnQty()-list.get(i).getDamageQty());
-				list.get(i).setAvgIssueQty(list.get(i).getIssueQty()/days);
+				list.get(i).setAvgIssueQty(list.get(i).getIssueQtyAvg()/days);
 			}
  
 		} catch (Exception e) {
@@ -301,18 +307,23 @@ public class StockRestController {
 		 ItemListWithCurrentStock  itemListWithCurrentStock = new ItemListWithCurrentStock();
 
 		try {
-
-			itemListWithCurrentStock = itemListWithCurrentStockRepository.getItemListByItemIdWithStock(fromDate,toDate,itemId);
 			
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("dd");
-			 
+			SimpleDateFormat yy = new SimpleDateFormat("yyyy");
+			SimpleDateFormat mm = new SimpleDateFormat("MM");
+			
 			int days =  Integer.parseInt(sf.format(date));
+			String year =   yy.format(date);
+			int month =  Integer.parseInt(mm.format(date));
+			String firstDate = year+"-"+month+"-01";
+
+			itemListWithCurrentStock = itemListWithCurrentStockRepository.getItemListByItemIdWithStock(firstDate,fromDate,toDate,itemId);
+			
 			 
-				
 			itemListWithCurrentStock.setClsQty(itemListWithCurrentStock.getOpeningStock()+itemListWithCurrentStock.getApproveQty()-itemListWithCurrentStock.getIssueQty()
 						+itemListWithCurrentStock.getIssueReturnQty()-itemListWithCurrentStock.getDamageQty());
-			itemListWithCurrentStock.setAvgIssueQty(itemListWithCurrentStock.getIssueQty()/days);
+			itemListWithCurrentStock.setAvgIssueQty(itemListWithCurrentStock.getIssueQtyAvg()/days);
 			 
  
 		} catch (Exception e) {
