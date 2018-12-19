@@ -1040,12 +1040,16 @@ public class ValueationRestController {
 	 
 	 @RequestMapping(value = { "/getItemExpectedReportBetweenDate" }, method = RequestMethod.POST)
 		public @ResponseBody List<ItemExpectedReport> getItemExpectedReportBetweenDate(@RequestParam("fromDate") String fromDate,
-				@RequestParam("toDate") String toDate ,@RequestParam("status") List<Integer> status) {
+				@RequestParam("toDate") String toDate ,@RequestParam("status") List<Integer> status,@RequestParam("catId") int catId) {
 
 			 List<ItemExpectedReport> list = new ArrayList<ItemExpectedReport>();
 			try {
-				 
+				 if(catId==0) {
 				 list = itemExpectedReportRepository.getItemExpectedReportBetweenDate(fromDate,toDate,status); 
+				 }else {
+					 
+					 list = itemExpectedReportRepository.getItemExpectedReportBetweenDate(fromDate,toDate,status,catId); 
+				 }
 
 			} catch (Exception e) {
 				 
@@ -1057,12 +1061,16 @@ public class ValueationRestController {
 	 
 	 @RequestMapping(value = { "/getShortItemReportBetweenDate" }, method = RequestMethod.POST)
 		public @ResponseBody List<ShortItemReport> getShortItemReportBetweenDate(@RequestParam("fromDate") String fromDate,
-				@RequestParam("toDate") String toDate ) {
+				@RequestParam("toDate") String toDate ,@RequestParam("catId") int catId) {
 
 			 List<ShortItemReport> list = new ArrayList<ShortItemReport>();
 			try {
 				 
+				if(catId==0) {
 				 list = shortItemReportRepository.getShortItemReportBetweenDate(fromDate,toDate); 
+				}else {
+					list = shortItemReportRepository.getShortItemReportBetweenDate(fromDate,toDate,catId); 
+				}
 
 			} catch (Exception e) {
 				 
