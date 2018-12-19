@@ -238,5 +238,27 @@ public class RateVerificationRestController {
 		return list;
 
 	}
+	
+	/*@RequestMapping(value = { "/getItemRateListByCatId" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetRmRateVerificationRecord> getItemRateListByCatId( 
+			@RequestParam("catId") int catId ) {
+ 
+		List<GetRmRateVerificationRecord> list = new ArrayList<GetRmRateVerificationRecord>();
+
+		try {
+
+			 
+			list = getRmRateVerificationRecordRepo.getItemRateListByCatId(catId);
+			 
+ 
+		} catch (Exception e) {
+ 
+			e.printStackTrace();
+			 
+		}
+
+		return list;
+
+	}*/
  
 }
