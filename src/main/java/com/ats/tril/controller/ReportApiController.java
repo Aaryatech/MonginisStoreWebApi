@@ -149,6 +149,34 @@ public class ReportApiController {
 		return poList;
 
 	}
+	
+	@RequestMapping(value = { "/getAllPoListHeaderDetailReportByDate" }, method = RequestMethod.POST)
+	public @ResponseBody List<POReport> getAllPoListHeaderDetailReportByDate( 
+			@RequestParam("fromDate") String fromDate,@RequestParam("toDate") String toDate) {
+
+		List<POReport> poList = new ArrayList<POReport>();
+
+		try {
+
+			poList = pOReportRepository.getAllPoListHeaderByDate(fromDate,toDate);
+
+			
+
+			for (int i = 0; i < poList.size(); i++) {
+				 
+				List<POReportDetail> list = pOReportDetailRepo.getPOReportDetailList(poList.get(i).getPoId());
+				poList.get(i).setpOReportDetailList(list);
+				
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return poList;
+
+	}
 
 	@RequestMapping(value = { "/getAllMrnListHeaderDetailReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<MrnReport> getAllMrnListHeaderDetailReport(

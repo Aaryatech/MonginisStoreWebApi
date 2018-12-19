@@ -59,8 +59,28 @@ public interface GetPoHeaderListRepository extends JpaRepository<GetPoHeaderList
 			"        p.po_date between :fromDate and :toDate\r\n" + 
 			"        and p.del_status=1 \r\n" + 
 			"        and v.vendor_id =p.vend_id  and p.ind_id=i.ind_m_id\r\n" + 
+			"        and i.cat_id=:catId and p.po_type=:typeId", nativeQuery = true)
+	List<GetPoHeaderList> getPoHeaderListBetweenDateAndCatId(@Param("fromDate") String fromDate,
+			@Param("toDate") String toDate,@Param("catId") int catId,@Param("typeId") int typeId);
+
+	
+	@Query(value = "select\r\n" + 
+			"        p.*,\r\n" + 
+			"        v.vendor_name \r\n" + 
+			"    from\r\n" + 
+			"        po_header p,\r\n" + 
+			"        m_vendor v,\r\n" + 
+			"        indent i\r\n" + 
+			"    where\r\n" + 
+			"        p.po_date between :fromDate and :toDate\r\n" + 
+			"        and p.del_status=1 \r\n" + 
+			"        and v.vendor_id =p.vend_id  and p.ind_id=i.ind_m_id\r\n" + 
 			"        and i.cat_id=:catId", nativeQuery = true)
 	List<GetPoHeaderList> getPoHeaderListBetweenDateAndCatId(@Param("fromDate") String fromDate,
 			@Param("toDate") String toDate,@Param("catId") int catId);
+
+	@Query(value = " select p.*,v.vendor_name from po_header p,m_vendor v where p.po_date between :fromDate and :toDate and del_status=1 and v.vendor_id =p.vend_id and p.po_type=:typeId", nativeQuery = true)
+	 List<GetPoHeaderList> getPoHeaderListBetweenDateAndTypeId(@Param("fromDate") String fromDate,
+			@Param("toDate") String toDate,@Param("typeId") int typeId);
 
 }
