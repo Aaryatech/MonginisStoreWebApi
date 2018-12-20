@@ -152,13 +152,20 @@ public class ReportApiController {
 	
 	@RequestMapping(value = { "/getAllPoListHeaderDetailReportByDate" }, method = RequestMethod.POST)
 	public @ResponseBody List<POReport> getAllPoListHeaderDetailReportByDate( 
-			@RequestParam("fromDate") String fromDate,@RequestParam("toDate") String toDate) {
+			@RequestParam("fromDate") String fromDate,@RequestParam("toDate") String toDate,@RequestParam("catId") int catId) {
 
 		List<POReport> poList = new ArrayList<POReport>();
 
 		try {
 
-			poList = pOReportRepository.getAllPoListHeaderByDate(fromDate,toDate);
+			if(catId==0) {
+				
+				poList = pOReportRepository.getAllPoListHeaderByDate(fromDate,toDate);
+			}else {
+				
+				poList = pOReportRepository.getAllPoListHeaderByDate(fromDate,toDate,catId);
+			}
+			
 
 			
 

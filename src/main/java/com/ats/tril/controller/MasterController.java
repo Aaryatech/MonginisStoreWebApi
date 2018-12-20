@@ -15,6 +15,7 @@ import com.ats.tril.model.AccountHead;
 import com.ats.tril.model.Category;
 import com.ats.tril.model.Company;
 import com.ats.tril.model.DeliveryTerms;
+import com.ats.tril.model.DepartmentMaster;
 import com.ats.tril.model.Dept;
 import com.ats.tril.model.DispatchMode;
 import com.ats.tril.model.DocType;
@@ -42,6 +43,7 @@ import com.ats.tril.repository.AccountHeadRepository;
 import com.ats.tril.repository.CategoryRepository;
 import com.ats.tril.repository.CompanyRepository;
 import com.ats.tril.repository.DeliveryTermsRepository;
+import com.ats.tril.repository.DepartmentMasterRepository;
 import com.ats.tril.repository.DeptRepository;
 import com.ats.tril.repository.DispatchModeRepository;
 import com.ats.tril.repository.DocTypeRepository;
@@ -141,6 +143,27 @@ public class MasterController {
 	
 	@Autowired
 	VendorListForRateVarificationRepository vendorListForRateVarificationRepository;
+	
+	@Autowired
+	DepartmentMasterRepository departmentMasterRepository;
+	
+	@RequestMapping(value = { "/getDepartmentMasterList" }, method = RequestMethod.GET)
+	public @ResponseBody List<DepartmentMaster> getDepartmentMasterList() {
+
+		List<DepartmentMaster> list = new ArrayList<>();
+
+		try {
+
+			list = departmentMasterRepository.findByDelStatus(1);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return list;
+
+	}
 	
 	@RequestMapping(value = { "/getCompanyDetails" }, method = RequestMethod.GET)
 	public @ResponseBody Company getCompanyDetails() {
