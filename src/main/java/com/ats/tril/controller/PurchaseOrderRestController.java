@@ -120,6 +120,43 @@ public class PurchaseOrderRestController {
 		return poHeaderList;
 
 	}
+	
+	
+	@RequestMapping(value = { "/getPoDetailScheduleDate" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage getPoDetailScheduleDate(  @RequestParam("poId") int poId ) {
+
+		 ErrorMessage errorMessage = new ErrorMessage();
+
+		try {
+			
+			SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+
+			  
+			 
+				
+				List<Date> schDate = poHeaderRepository.getschDate(poId);
+				
+				System.out.println(schDate);
+				try {
+					
+					errorMessage.setMessage((sf.format(schDate.get(0))));
+					errorMessage.setError(false);
+				}catch(Exception e) {
+					errorMessage.setError(true);
+					e.printStackTrace();
+				}
+		 
+
+		} catch (Exception e) {
+
+			System.err.println("Exception /getPOHeaderList @PurchaseOrderRestControlle ");
+
+			e.printStackTrace();
+
+		}
+		return errorMessage;
+
+	}
 
 	@RequestMapping(value = { "/savePoHeaderAndDetail" }, method = RequestMethod.POST)
 	public @ResponseBody PoHeader savePoHeaderAndDetail(@RequestBody PoHeader poHeader) {
