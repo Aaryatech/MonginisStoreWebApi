@@ -25,7 +25,28 @@ public interface VendorRepository extends JpaRepository<Vendor, Integer>{
 	@Query(value=("select * from m_vendor where vendor_code = (select max(vendor_code) from m_vendor where vendor_code LIKE :str%)"),nativeQuery=true)
 	Vendor getNextVendorNo(@Param("str") String str);
 
-	@Query(value=("select * from m_vendor where vendor_id in (select supp_id from m_rm_rate_verif where rm_id in (select item_id from indtrans where ind_m_id =:indId and del_status=1))"),nativeQuery=true)
+	@Query(value=("select\r\n" + 
+			"        * \r\n" + 
+			"    from\r\n" + 
+			"        m_vendor \r\n" + 
+			"    where\r\n" + 
+			"        vendor_id in (\r\n" + 
+			"            select\r\n" + 
+			"                supp_id \r\n" + 
+			"            from\r\n" + 
+			"                m_rm_rate_verif \r\n" + 
+			"            where\r\n" + 
+			"                rm_id in (\r\n" + 
+			"                    select\r\n" + 
+			"                        item_id \r\n" + 
+			"                    from\r\n" + 
+			"                        indtrans \r\n" + 
+			"                    where\r\n" + 
+			"                        ind_m_id =:indId\r\n" + 
+			"                        and del_status=1\r\n" + 
+			"                        and ind_fyr>0\r\n" + 
+			"                )\r\n" + 
+			"            ) and is_used=1"),nativeQuery=true)
 	List<Vendor> getVendorByIndendId(@Param("indId")int indId);
  
 	
