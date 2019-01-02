@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.tril.model.ErrorMessage;
+import com.ats.tril.model.MrnItemList;
+import com.ats.tril.model.mrn.MrnDetail;
 import com.ats.tril.model.rejection.GetRejectionMemo;
 import com.ats.tril.model.rejection.GetRejectionMemoDetail;
 import com.ats.tril.model.rejection.RejectionMemo;
@@ -22,6 +24,7 @@ import com.ats.tril.model.rejection.repo.GetRejectionMemoRepo;
 import com.ats.tril.model.rejection.repo.RejectionMemoDetailRepo;
 import com.ats.tril.model.rejection.repo.RejectionMemoRepo;
 import com.ats.tril.model.rejection.repo.RejectionReportRepo;
+import com.ats.tril.repository.mrn.MrnDetailRepo;
 
 @RestController
 public class RejectionController {
@@ -40,6 +43,9 @@ public class RejectionController {
 
 	@Autowired
 	RejectionReportRepo rejectionReportRepo;
+	
+	@Autowired
+	MrnDetailRepo mrnDetailRepo;
 
 	@RequestMapping(value = { "/saveRejectionMemoHeaderDetail" }, method = RequestMethod.POST)
 	public @ResponseBody List<RejectionMemo> saveRejectionMemoHeaderDetail(
@@ -187,6 +193,57 @@ public class RejectionController {
 		}
 		return rejList;
 
+	}
+	
+	@RequestMapping(value = { "/updateApprovedQtyWhileReturnProcess" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage updateApprovedQtyWhileReturnProcess(@RequestBody List<MrnItemList> mrnItemList) {
+
+		ErrorMessage errorMessage = new ErrorMessage();
+
+		try {
+			for(int i=0 ; i< mrnItemList.size() ; i++) {
+				 
+				float remQty = mrnItemList.get(i).getPendingQty() - mrnItemList.get(i).getReturnQty(); 
+				int update = mrnDetailRepo.updaetQty(mrnItemList.get(i).getMrnDetailedId(),remQty);
+			} 
+				errorMessage.setError(false);
+				errorMessage.setMessage("Updated Successfully");
+			 
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			errorMessage.setError(true);
+			errorMessage.setMessage("Updation Failed :EXC");
+
+		}
+		return errorMessage;
+	}
+	
+	@RequestMapping(value = { "/updatePendingQtyWhileDeleteReturnProcess" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage updatePendingQtyWhileDeleteReturnProcess(@RequestBody List<MrnItemList> mrnItemList) {
+
+		ErrorMessage errorMessage = new ErrorMessage();
+
+		try {
+			for(int i=0 ; i< mrnItemList.size() ; i++) {
+				 
+				MrnDetail mrnDetail = mrnDetailRepo.findByMrnDetailId(mrnItemList.get(i).getMrnDetailedId());
+				float remQty = mrnDetail.getRemainingQty() + mrnItemList.get(i).getReturnQty(); 
+				int update = mrnDetailRepo.updaetQty(mrnItemList.get(i).getMrnDetailedId(),remQty);
+			} 
+				errorMessage.setError(false);
+				errorMessage.setMessage("Updated Successfully");
+			 
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			errorMessage.setError(true);
+			errorMessage.setMessage("Updation Failed :EXC");
+
+		}
+		return errorMessage;
 	}
 
 }

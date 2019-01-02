@@ -47,6 +47,9 @@ public class GetMrnDetailRej {
 	private int mrnDetailStatus;
 
 	private int delStatus;
+	
+	private float chalanQty;
+	 
 
 	public int getMrnDetailId() {
 		return mrnDetailId;
@@ -192,13 +195,22 @@ public class GetMrnDetailRej {
 		this.delStatus = delStatus;
 	}
 
+	public float getChalanQty() {
+		return chalanQty;
+	}
+
+	public void setChalanQty(float chalanQty) {
+		this.chalanQty = chalanQty;
+	}
+
 	@Override
 	public String toString() {
 		return "GetMrnDetailRej [mrnDetailId=" + mrnDetailId + ", mrnId=" + mrnId + ", itemId=" + itemId + ", itemName="
 				+ itemName + ", itemCode=" + itemCode + ", indentQty=" + indentQty + ", poQty=" + poQty + ", mrnQty="
 				+ mrnQty + ", approveQty=" + approveQty + ", rejectQty=" + rejectQty + ", rejectRemark=" + rejectRemark
 				+ ", batchNo=" + batchNo + ", issueQty=" + issueQty + ", remainingQty=" + remainingQty + ", poId="
-				+ poId + ", poNo=" + poNo + ", mrnDetailStatus=" + mrnDetailStatus + ", delStatus=" + delStatus + "]";
+				+ poId + ", poNo=" + poNo + ", mrnDetailStatus=" + mrnDetailStatus + ", delStatus=" + delStatus
+				+ ", chalanQty=" + chalanQty + "]";
 	}
 
 }

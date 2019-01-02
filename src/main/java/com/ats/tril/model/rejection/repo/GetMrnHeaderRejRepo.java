@@ -10,7 +10,7 @@ import com.ats.tril.model.mrn.GetMrnHeaderRej;
 
 public interface GetMrnHeaderRejRepo extends JpaRepository<GetMrnHeaderRej, Integer> {
 
-	@Query(value = "SELECT m.*, v.vendor_name FROM t_mrn_header m,m_vendor v WHERE m.vendor_id=v.vendor_id AND  m.mrn_id IN(:status)  AND m.del_status=1", nativeQuery = true)
-	List<GetMrnHeaderRej> getMrnHeaderByList(@Param("status") List<Integer> status);
+	@Query(value = "SELECT m.*, v.vendor_name FROM t_mrn_header m,m_vendor v WHERE m.vendor_id=v.vendor_id AND  m.mrn_id IN(:mrnId)  AND m.del_status=1", nativeQuery = true)
+	List<GetMrnHeaderRej> getMrnHeaderByList(@Param("mrnId") List<Integer> mrnId);
 
 }

@@ -10,12 +10,37 @@ import com.ats.tril.model.GetDamage;
 
 public interface GetDamageRepository extends JpaRepository<GetDamage, Integer>{
 
-	@Query(value = "select d.*,i.item_code,i.item_desc from t_damage d,m_item i where d.item_id = i.item_id "
-			+ "and d.date between :fromDate and :toDate and d.del_status=1", nativeQuery = true)
+	@Query(value = "select\r\n" + 
+			"        d.*,\r\n" + 
+			"        i.item_code,\r\n" + 
+			"        i.item_desc,\r\n" + 
+			"        v.vendor_name,\r\n" + 
+			"        v.vendor_code\r\n" + 
+			"    from\r\n" + 
+			"        t_damage d,\r\n" + 
+			"        m_item i,\r\n" + 
+			"        m_vendor v\r\n" + 
+			"    where\r\n" + 
+			"        d.item_id = i.item_id \r\n" + 
+			"        and d.date between :fromDate and :toDate\r\n" + 
+			"        and d.del_status=1\r\n" + 
+			"        and d.extra1=v.vendor_id", nativeQuery = true)
 	List<GetDamage> getDamageList(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
 
-	@Query(value = "select d.*,i.item_code,i.item_desc from t_damage d,m_item i where d.item_id = i.item_id "
-			+ "and d.damage_id =:damageId ", nativeQuery = true)
+	@Query(value = "select\r\n" + 
+			"        d.*,\r\n" + 
+			"        i.item_code,\r\n" + 
+			"        i.item_desc,\r\n" + 
+			"        v.vendor_code,\r\n" + 
+			"        v.vendor_name\r\n" + 
+			"    from\r\n" + 
+			"        t_damage d,\r\n" + 
+			"        m_item i,\r\n" + 
+			"        m_vendor v\r\n" + 
+			"    where\r\n" + 
+			"        d.item_id = i.item_id \r\n" + 
+			"        and d.damage_id =:damageId \r\n" + 
+			"        and d.extra1=v.vendor_id", nativeQuery = true)
 	GetDamage getDamageById(@Param("damageId") int damageId);
 
 }

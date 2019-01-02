@@ -537,6 +537,57 @@ public class MrnApiController {
 		return mrnHeaderList;
 
 	}
+	
+	@RequestMapping(value = { "/getMrnListByVendorIdForRejectionMemoForPune" }, method = RequestMethod.POST)
+	public @ResponseBody List<MrnHeader> getMrnListByVendorIdForRejectionMemo(@RequestParam("vendId") int vendId,@RequestParam("itemId") int itemId) {
+
+		List<MrnHeader> mrnHeaderList = new ArrayList<MrnHeader>();
+
+		try {
+
+			mrnHeaderList = mrnHeaderRepository.getMrnListByVendorIdForRejectionMemo(vendId,itemId);
+
+		} catch (Exception e) {
+
+			System.err.println("Exception in getIndents Indent  " + e.getMessage());
+
+			e.printStackTrace();
+
+		}
+
+		return mrnHeaderList;
+
+	}
+
+	//akshay
+	@RequestMapping(value = { "/getMrnHeaderDetailForPune" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetMrnHeaderRej> getMrnHeaderDetail(@RequestParam("status") List<Integer> mrnIds,@RequestParam("itemId") int itemId) {
+
+		List<GetMrnHeaderRej> mrnHeaderList = new ArrayList<GetMrnHeaderRej>();
+
+		try {
+
+			mrnHeaderList = getMrnHeaderRejRepo.getMrnHeaderByList(mrnIds);
+			//List<GetMrnDetailRej> getMrnDetailList = getMrnDetailRejRepo.getMrnDetailByList(status);
+
+			for (int i = 0; i < mrnHeaderList.size(); i++) {
+ 
+				int mrnId = mrnHeaderList.get(i).getMrnId();
+				
+				List<GetMrnDetailRej> getMrnDetailList = getMrnDetailRejRepo.getMrnDetailByList(mrnId,itemId);
+
+				mrnHeaderList.get(i).setGetMrnDetailRejList(getMrnDetailList);
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return mrnHeaderList;
+
+	}
 
 	@RequestMapping(value = { "/deleteMrnHeader" }, method = RequestMethod.POST)
 	public @ResponseBody ErrorMessage deleteMrnHeader(@RequestParam("mrnId") int mrnId) {

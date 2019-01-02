@@ -51,5 +51,14 @@ public interface MrnDetailRepo extends JpaRepository<MrnDetail, Integer> {
 	int updateStatusWhileApprov(@Param("mrnDetalId")List<Integer> mrnDetalId,@Param("status") int status);
 
 	List<MrnDetail> findByMrnIdAndDelStatus(int mrnId, int i);
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE MrnDetail SET remainingQty=:remQty WHERE mrn_detail_id=:mrnDetailedId")
+	int updaetQty(@Param("mrnDetailedId")int mrnDetailedId,@Param("remQty") float remQty);
+
+	MrnDetail findByMrnDetailId(int mrnDetailedId);
+	
+	
 	
 }
