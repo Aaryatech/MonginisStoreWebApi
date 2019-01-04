@@ -57,6 +57,12 @@ public class GetCurrentStock {
 	@Column(name = "gatepass_return_qty")
 	private float gatepassReturnQty;
 	
+	@Column(name = "op_landing_value")
+	private float opLandingValue; 
+	
+	@Column(name = "damage_landing_value")
+	private float damageLandingValue;
+	
 	@Transient
 	private float rolLevel;
 	
@@ -188,6 +194,22 @@ public class GetCurrentStock {
 		this.damagValue = damagValue;
 	}
 
+	public float getOpLandingValue() {
+		return opLandingValue;
+	}
+
+	public void setOpLandingValue(float opLandingValue) {
+		this.opLandingValue = opLandingValue;
+	}
+
+	public float getDamageLandingValue() {
+		return damageLandingValue;
+	}
+
+	public void setDamageLandingValue(float damageLandingValue) {
+		this.damageLandingValue = damageLandingValue;
+	}
+
 	@Override
 	public String toString() {
 		return "GetCurrentStock [itemId=" + itemId + ", itemCode=" + itemCode + ", openingStock=" + openingStock
@@ -195,7 +217,8 @@ public class GetCurrentStock {
 				+ approvedQtyValue + ", approvedLandingValue=" + approvedLandingValue + ", issueQty=" + issueQty
 				+ ", issueQtyValue=" + issueQtyValue + ", issueLandingValue=" + issueLandingValue + ", returnIssueQty="
 				+ returnIssueQty + ", damageQty=" + damageQty + ", damagValue=" + damagValue + ", gatepassQty="
-				+ gatepassQty + ", gatepassReturnQty=" + gatepassReturnQty + ", rolLevel=" + rolLevel + "]";
+				+ gatepassQty + ", gatepassReturnQty=" + gatepassReturnQty + ", opLandingValue=" + opLandingValue
+				+ ", damageLandingValue=" + damageLandingValue + ", rolLevel=" + rolLevel + "]";
 	}
 	
 	

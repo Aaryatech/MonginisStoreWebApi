@@ -46,6 +46,12 @@ public class StockValuationCategoryWise {
 	
 	@Column(name = "damage_value")
 	private float damageValue;
+	
+	@Column(name = "op_landing_value")
+	private float opLandingValue; 
+	
+	@Column(name = "damage_landing_value")
+	private float damageLandingValue;
 
 	public int getCatId() {
 		return catId;
@@ -143,13 +149,30 @@ public class StockValuationCategoryWise {
 		this.damageValue = damageValue;
 	}
 
+	public float getOpLandingValue() {
+		return opLandingValue;
+	}
+
+	public void setOpLandingValue(float opLandingValue) {
+		this.opLandingValue = opLandingValue;
+	}
+
+	public float getDamageLandingValue() {
+		return damageLandingValue;
+	}
+
+	public void setDamageLandingValue(float damageLandingValue) {
+		this.damageLandingValue = damageLandingValue;
+	}
+
 	@Override
 	public String toString() {
 		return "StockValuationCategoryWise [catId=" + catId + ", catDesc=" + catDesc + ", openingStock=" + openingStock
 				+ ", opStockValue=" + opStockValue + ", approveQty=" + approveQty + ", approvedQtyValue="
 				+ approvedQtyValue + ", approvedLandingValue=" + approvedLandingValue + ", issueQty=" + issueQty
 				+ ", issueQtyValue=" + issueQtyValue + ", issueLandingValue=" + issueLandingValue + ", damageQty="
-				+ damageQty + ", damageValue=" + damageValue + "]";
+				+ damageQty + ", damageValue=" + damageValue + ", opLandingValue=" + opLandingValue
+				+ ", damageLandingValue=" + damageLandingValue + "]";
 	}
 	
 	
