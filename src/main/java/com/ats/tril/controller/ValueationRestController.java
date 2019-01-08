@@ -985,50 +985,94 @@ public class ValueationRestController {
 	 
 	 @RequestMapping(value = { "/indentStatusReport" }, method = RequestMethod.POST)
 		public @ResponseBody List<IndentStatusReport> indentStatusReport(@RequestParam("fromDate") String fromDate,
-				@RequestParam("toDate") String toDate ) {
+				@RequestParam("toDate") String toDate,@RequestParam("flag") int flag  ) {
 
 			 List<IndentStatusReport> indentPendig = new ArrayList<IndentStatusReport>();
 			 List<IndentStatusReport> pendingPo = new ArrayList<IndentStatusReport>();
 			 List<IndentStatusReport> rejectedMrn = new ArrayList<IndentStatusReport>();
 			try {
 				 int index=0;
-				indentPendig = indentStatusReportRepository.indentPendig(fromDate,toDate,index); 
-				
-				if(!indentPendig.isEmpty()) {
-			    	 
-			    	 index=indentPendig.get(indentPendig.size()-1).getSr();
-			     }
-				
-				pendingPo = indentStatusReportRepository.pendingPo(fromDate,toDate,index); 
+				 
+				 if(flag==0) {
+					 
+					 indentPendig = indentStatusReportRepository.indentPendig(fromDate,toDate,index); 
+						
+						if(!indentPendig.isEmpty()) {
+					    	 
+					    	 index=indentPendig.get(indentPendig.size()-1).getSr();
+					     }
+						
+						pendingPo = indentStatusReportRepository.pendingPo(fromDate,toDate,index); 
 
-				if(!pendingPo.isEmpty()) {
-			    	 
-			    	 index=pendingPo.get(pendingPo.size()-1).getSr();
-			     }
-				
-				rejectedMrn = indentStatusReportRepository.rejectedMrn(fromDate,toDate,index); 
-				
-				
-				
-				for(int i=0 ; i<pendingPo.size() ; i++) {
-					
-					indentPendig.add(pendingPo.get(i));
-				}
-				
-				for(int i=0 ; i<rejectedMrn.size() ; i++) {
-					
-					indentPendig.add(rejectedMrn.get(i));
-				}
-				
-				Collections.sort(indentPendig, new Comparator<IndentStatusReport>() {
-		            @Override
-		            public int compare(IndentStatusReport indentStatusReport, IndentStatusReport t1) {
-		                String s1 = indentStatusReport.getIndMNo();
-		                String s2 = t1.getIndMNo();
-		                return s1.compareToIgnoreCase(s2);
-		            }
+						if(!pendingPo.isEmpty()) {
+					    	 
+					    	 index=pendingPo.get(pendingPo.size()-1).getSr();
+					     }
+						
+						rejectedMrn = indentStatusReportRepository.rejectedMrn(fromDate,toDate,index); 
+						
+						
+						
+						for(int i=0 ; i<pendingPo.size() ; i++) {
+							
+							indentPendig.add(pendingPo.get(i));
+						}
+						
+						for(int i=0 ; i<rejectedMrn.size() ; i++) {
+							
+							indentPendig.add(rejectedMrn.get(i));
+						}
+						
+						Collections.sort(indentPendig, new Comparator<IndentStatusReport>() {
+				            @Override
+				            public int compare(IndentStatusReport indentStatusReport, IndentStatusReport t1) {
+				                String s1 = indentStatusReport.getIndMNo();
+				                String s2 = t1.getIndMNo();
+				                return s1.compareToIgnoreCase(s2);
+				            }
 
-		        });
+				        });
+				 }else {
+					 
+					 indentPendig = indentStatusReportRepository.indentPendigBySchDate(fromDate,toDate,index); 
+						
+						if(!indentPendig.isEmpty()) {
+					    	 
+					    	 index=indentPendig.get(indentPendig.size()-1).getSr();
+					     }
+						
+						pendingPo = indentStatusReportRepository.pendingPoBySchDate(fromDate,toDate,index); 
+
+						if(!pendingPo.isEmpty()) {
+					    	 
+					    	 index=pendingPo.get(pendingPo.size()-1).getSr();
+					     }
+						
+						rejectedMrn = indentStatusReportRepository.rejectedMrn(fromDate,toDate,index); 
+						
+						
+						
+						for(int i=0 ; i<pendingPo.size() ; i++) {
+							
+							indentPendig.add(pendingPo.get(i));
+						}
+						
+						for(int i=0 ; i<rejectedMrn.size() ; i++) {
+							
+							indentPendig.add(rejectedMrn.get(i));
+						}
+						
+						Collections.sort(indentPendig, new Comparator<IndentStatusReport>() {
+				            @Override
+				            public int compare(IndentStatusReport indentStatusReport, IndentStatusReport t1) {
+				                String s1 = indentStatusReport.getIndMNo();
+				                String s2 = t1.getIndMNo();
+				                return s1.compareToIgnoreCase(s2);
+				            }
+
+				        });
+				 }
+				
 				
 			} catch (Exception e) {
 				 

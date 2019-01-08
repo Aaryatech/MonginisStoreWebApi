@@ -165,6 +165,26 @@ public class IssueRestController {
 
 	}
 	
+	@RequestMapping(value = { "/getBatchByMultipleItemIds" }, method = RequestMethod.POST)
+	public @ResponseBody List<MrnDetail> getBatchByMultipleItemIds(@RequestParam("itemIds") List<Integer> itemIds, 
+			@RequestParam("date") String date) {
+		 
+		List<MrnDetail> indTransList = new ArrayList<>();
+
+		try {
+ 
+			indTransList = mrnDetailRepo.getBatchByMultipleItemIds(itemIds, date); 
+
+		} catch (Exception e) {
+  
+			e.printStackTrace();
+
+		}
+
+		return indTransList;
+
+	}
+	
 	@RequestMapping(value = { "/getMrnDetailListByMrnDetailId" }, method = RequestMethod.POST)
 	public @ResponseBody List<MrnDetail> getMrnDetailListByMrnDetailId(@RequestParam("mrnDetailList") List<Integer> mrnDetailList) {
 		 

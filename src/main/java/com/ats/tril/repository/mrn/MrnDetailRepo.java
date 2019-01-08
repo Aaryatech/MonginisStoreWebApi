@@ -33,7 +33,7 @@ public interface MrnDetailRepo extends JpaRepository<MrnDetail, Integer> {
 			"        and md.del_status=1\n" + 
 			"        and md.mrn_detail_status>=4\n" + 
 			"        and mh.mrn_date<=:date\n" + 
-			"        and mh.mrn_id=md.mrn_id ",nativeQuery=true)
+			"        and mh.mrn_id=md.mrn_id and mh.del_status=1",nativeQuery=true)
 	List<MrnDetail> findByItemIdAndDelStatusAndMrnDetailStatus(@Param("itemId")int itemId ,
 			@Param("date")String date);
 
@@ -58,6 +58,19 @@ public interface MrnDetailRepo extends JpaRepository<MrnDetail, Integer> {
 	int updaetQty(@Param("mrnDetailedId")int mrnDetailedId,@Param("remQty") float remQty);
 
 	MrnDetail findByMrnDetailId(int mrnDetailedId);
+
+	@Query(value="select\n" + 
+			"       md.*\n" + 
+			"    from\n" + 
+			"        t_mrn_detail md,\n" + 
+			"        t_mrn_header mh\n" + 
+			"    where\n" + 
+			"        md.item_id in (:itemIds)\n" + 
+			"        and md.del_status=1\n" + 
+			"        and md.mrn_detail_status>=4\n" + 
+			"        and mh.mrn_date<=:date\n" + 
+			"        and mh.mrn_id=md.mrn_id and mh.del_status=1",nativeQuery=true)
+	List<MrnDetail> getBatchByMultipleItemIds(@Param("itemIds")List<Integer> itemIds,@Param("date") String date);
 	
 	
 	
