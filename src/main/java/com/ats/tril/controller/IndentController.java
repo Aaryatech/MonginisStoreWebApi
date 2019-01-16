@@ -247,6 +247,39 @@ public class IndentController {
 		return indentList;
 
 	}
+	
+	@RequestMapping(value = { "/getIndentsByType" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetIndent> getIndentsByType(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate, @RequestParam("status") List<String> status, @RequestParam("typeId") int typeId) {
+
+		 
+
+		List<GetIndent> indentList = new ArrayList<GetIndent>();
+
+		try {
+
+			if(typeId==0) {
+				
+				indentList = getIndentRepo.getIndent(fromDate, toDate, status);
+				
+			}else {
+				
+				indentList = getIndentRepo.getIndent(fromDate, toDate, status,typeId);
+				
+			}
+			
+
+		 
+		} catch (Exception e) {
+
+		 
+			e.printStackTrace();
+
+		}
+
+		return indentList;
+
+	}
 
 	@RequestMapping(value = { "/getIndentsForApproval" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetIndent> getIndentsForApproval(@RequestParam("toDate") String toDate,
