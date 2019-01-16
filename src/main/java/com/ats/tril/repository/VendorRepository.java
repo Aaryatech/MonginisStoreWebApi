@@ -46,7 +46,7 @@ public interface VendorRepository extends JpaRepository<Vendor, Integer>{
 			"                        and del_status=1\r\n" + 
 			"                        and ind_fyr>0\r\n" + 
 			"                )\r\n" + 
-			"            ) and is_used=1"),nativeQuery=true)
+			"            ) and is_used=1 and created_in=1"),nativeQuery=true)
 	List<Vendor> getVendorByIndendId(@Param("indId")int indId);
  
 	

@@ -63,6 +63,9 @@ public class ItemListWithCurrentStock {
 	@Column(name = "issue_qty_avg")
 	private float issueQtyAvg;
 	
+	@Column(name = "active")
+	private int active;
+	
 	@Transient
 	private float avgIssueQty; 
 	
@@ -221,14 +224,22 @@ public class ItemListWithCurrentStock {
 		this.issueQtyAvg = issueQtyAvg;
 	}
 
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
 		return "ItemListWithCurrentStock [itemId=" + itemId + ", itemCode=" + itemCode + ", catId=" + catId + ", grpId="
 				+ grpId + ", itemUom=" + itemUom + ", itemDesc=" + itemDesc + ", minLevel=" + minLevel + ", maxLevel="
 				+ maxLevel + ", rolLevel=" + rolLevel + ", openingStock=" + openingStock + ", approveQty=" + approveQty
 				+ ", issueQty=" + issueQty + ", issueReturnQty=" + issueReturnQty + ", damageQty=" + damageQty
-				+ ", poPending=" + poPending + ", itemopQty=" + itemopQty + ", issueQtyAvg=" + issueQtyAvg
-				+ ", avgIssueQty=" + avgIssueQty + ", clsQty=" + clsQty + "]";
+				+ ", poPending=" + poPending + ", itemopQty=" + itemopQty + ", issueQtyAvg=" + issueQtyAvg + ", active="
+				+ active + ", avgIssueQty=" + avgIssueQty + ", clsQty=" + clsQty + "]";
 	}
  
 	

@@ -89,13 +89,14 @@ public class DamageRestController {
 	}
 	
 	@RequestMapping(value = { "/getDamageList" }, method = RequestMethod.POST)
-	public @ResponseBody List<GetDamage> getDamageList(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate) {
+	public @ResponseBody List<GetDamage> getDamageList(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate
+			, @RequestParam("typeId") List<Integer> typeId) {
 		
 		List<GetDamage> getDamageList = new ArrayList<GetDamage>();
 
 		try {
 
-			getDamageList = getDamageRepository.getDamageList(fromDate,toDate);
+			getDamageList = getDamageRepository.getDamageList(fromDate,toDate,typeId);
  
 		} catch (Exception e) {
 

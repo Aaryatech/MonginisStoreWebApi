@@ -24,8 +24,8 @@ public interface GetDamageRepository extends JpaRepository<GetDamage, Integer>{
 			"        d.item_id = i.item_id \r\n" + 
 			"        and d.date between :fromDate and :toDate\r\n" + 
 			"        and d.del_status=1\r\n" + 
-			"        and d.extra1=v.vendor_id", nativeQuery = true)
-	List<GetDamage> getDamageList(@Param("fromDate") String fromDate, @Param("toDate") String toDate);
+			"        and d.extra1=v.vendor_id and extra2 in (:typeId)", nativeQuery = true)
+	List<GetDamage> getDamageList(@Param("fromDate") String fromDate, @Param("toDate") String toDate,@Param("typeId") List<Integer> typeId);
 
 	@Query(value = "select\r\n" + 
 			"        d.*,\r\n" + 
@@ -42,5 +42,5 @@ public interface GetDamageRepository extends JpaRepository<GetDamage, Integer>{
 			"        and d.damage_id =:damageId \r\n" + 
 			"        and d.extra1=v.vendor_id", nativeQuery = true)
 	GetDamage getDamageById(@Param("damageId") int damageId);
-
+ 
 }
