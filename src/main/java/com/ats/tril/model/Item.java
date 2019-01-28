@@ -36,21 +36,21 @@ public class Item {
 
 	private Float itemOpRate;
 
-	private int itemOpQty;
+	private Float itemOpQty;
 
 	private Float itemClRate;
 
-	private int itemClQty;
+	private Float itemClQty;
 
 	private String itemDate;
 
 	private Float itemWt;
 
-	private int itemMinLevel;
+	private Float itemMinLevel;
 
-	private int itemMaxLevel;
+	private Float itemMaxLevel;
 
-	private int itemRodLevel;
+	private Float itemRodLevel;
 
 	private String itemLocation;
 
@@ -162,11 +162,11 @@ public class Item {
 		this.itemOpRate = itemOpRate;
 	}
 
-	public int getItemOpQty() {
+	public Float getItemOpQty() {
 		return itemOpQty;
 	}
 
-	public void setItemOpQty(int itemOpQty) {
+	public void setItemOpQty(Float itemOpQty) {
 		this.itemOpQty = itemOpQty;
 	}
 
@@ -178,11 +178,11 @@ public class Item {
 		this.itemClRate = itemClRate;
 	}
 
-	public int getItemClQty() {
+	public Float getItemClQty() {
 		return itemClQty;
 	}
 
-	public void setItemClQty(int itemClQty) {
+	public void setItemClQty(Float itemClQty) {
 		this.itemClQty = itemClQty;
 	}
 
@@ -202,27 +202,27 @@ public class Item {
 		this.itemWt = itemWt;
 	}
 
-	public int getItemMinLevel() {
+	public Float getItemMinLevel() {
 		return itemMinLevel;
 	}
 
-	public void setItemMinLevel(int itemMinLevel) {
+	public void setItemMinLevel(Float itemMinLevel) {
 		this.itemMinLevel = itemMinLevel;
 	}
 
-	public int getItemMaxLevel() {
+	public Float getItemMaxLevel() {
 		return itemMaxLevel;
 	}
 
-	public void setItemMaxLevel(int itemMaxLevel) {
+	public void setItemMaxLevel(Float itemMaxLevel) {
 		this.itemMaxLevel = itemMaxLevel;
 	}
 
-	public int getItemRodLevel() {
+	public Float getItemRodLevel() {
 		return itemRodLevel;
 	}
 
-	public void setItemRodLevel(int itemRodLevel) {
+	public void setItemRodLevel(Float itemRodLevel) {
 		this.itemRodLevel = itemRodLevel;
 	}
 
