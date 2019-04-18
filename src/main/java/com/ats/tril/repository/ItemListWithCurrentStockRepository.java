@@ -155,7 +155,7 @@ public interface ItemListWithCurrentStockRepository extends JpaRepository<ItemLi
 			"            and t_damage.del_status=1               \r\n" + 
 			"            AND m_item.item_id=t_damage.item_id),\r\n" + 
 			"        0) AS damage_qty,\r\n" + 
-			"         coalesce(((coalesce(select\r\n" + 
+			"         coalesce(((select\r\n" + 
 			"            coalesce(sum(po_detail.pending_qty),0) \r\n" + 
 			"        from\r\n" + 
 			"            po_detail,\r\n" + 
@@ -164,8 +164,8 @@ public interface ItemListWithCurrentStockRepository extends JpaRepository<ItemLi
 			"            po_detail.status in (0,1) \r\n" + 
 			"            and                po_detail.item_id =m_item.item_id \r\n" + 
 			"            and po_header.del_status=1 \r\n" + 
-			"            and po_header.po_id=po_detail.po_id),0)+ coalesce(select  coalesce(sum(indtrans.ind_fyr),0) from indtrans,indent where indtrans.del_status=1 and \r\n" + 
-			"            indent.ind_m_id=indtrans.ind_m_id and indent.del_status=1 and indtrans.item_id=m_item.item_id),0)),\r\n" + 
+			"            and po_header.po_id=po_detail.po_id)+ (select  coalesce(sum(indtrans.ind_fyr),0) from indtrans,indent where indtrans.del_status=1 and \r\n" + 
+			"            indent.ind_m_id=indtrans.ind_m_id and indent.del_status=1 and indtrans.item_id=m_item.item_id)),\r\n" + 
 			"        0) AS po_pending,\r\n" + 
 			"        coalesce((Select\r\n" + 
 			"            SUM(item_issue_detail.item_issue_qty)           \r\n" + 
@@ -322,15 +322,15 @@ public interface ItemListWithCurrentStockRepository extends JpaRepository<ItemLi
 			"            and t_damage.del_status=1 \r\n" + 
 			"            AND m_item.item_id=t_damage.item_id),\r\n" + 
 			"        0) AS damage_qty,coalesce(((select\r\n" + 
-			"            sum(po_detail.pending_qty) \r\n" + 
+			"          coalesce  (sum(po_detail.pending_qty),0) \r\n" + 
 			"        from\r\n" + 
 			"            po_detail,\r\n" + 
 			"            po_header \r\n" + 
 			"        where\r\n" + 
-			"            po_detail.status in (0,1) \r\n" + 
+			"            po_detail.status in (0,1,7,9) \r\n" + 
 			"            and                po_detail.item_id =m_item.item_id \r\n" + 
 			"            and po_header.del_status=1 \r\n" + 
-			"            and po_header.po_id=po_detail.po_id)+(select sum(indtrans.ind_fyr) from indtrans,indent where indtrans.del_status=1 and \r\n" + 
+			"            and po_header.po_id=po_detail.po_id)+(select coalesce (sum(indtrans.ind_fyr),0) from indtrans,indent where indtrans.del_status=1 and \r\n" + 
 			"            indent.ind_m_id=indtrans.ind_m_id and indent.del_status=1 and indtrans.item_id=m_item.item_id)),\r\n" + 
 			"        0) AS po_pending,coalesce((Select\r\n" + 
 			"            SUM(item_issue_detail.item_issue_qty)           \r\n" + 
