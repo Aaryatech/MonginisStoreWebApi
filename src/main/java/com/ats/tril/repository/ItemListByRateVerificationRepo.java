@@ -13,14 +13,15 @@ public interface ItemListByRateVerificationRepo extends JpaRepository<ItemListBy
 	@Query(value = ("select\r\n" + 
 			"        v.*,\r\n" + 
 			"        rv.rate_tax_incl,\r\n" + 
-			"        rv.rate_tax_extra \r\n" + 
+			"        rv.rate_tax_extra       \r\n" + 
 			"    from\r\n" + 
 			"        m_item v,\r\n" + 
-			"        m_rm_rate_verif rv \r\n" + 
+			"        m_rm_rate_verif rv       \r\n" + 
 			"    where\r\n" + 
-			"        rv.rm_id=v.item_id \r\n" + 
-			"        and rv.supp_id=:vendId \r\n" + 
-			"        and v.is_used=1"), nativeQuery = true)
+			"        rv.rm_id=v.item_id           \r\n" + 
+			"        and rv.supp_id=:vendId          \r\n" + 
+			"        and v.is_used=1\r\n" + 
+			"    order by rv.rm_rate_ver_id desc "), nativeQuery = true)
 	List<ItemListByRateVerification> getRateVerificationItemListByVendId(@Param("vendId") int vendId);
 
 }

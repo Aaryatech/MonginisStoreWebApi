@@ -341,13 +341,13 @@ public class StockRestController {
 	}
 	
 	@RequestMapping(value = { "/getAllitemOpeningStock" }, method = RequestMethod.POST)
-	public @ResponseBody List<OpeningStockModel> getAllitemOpeningStock(@RequestParam("cat_id") int cat_id) {
+	public @ResponseBody List<OpeningStockModel> getAllitemOpeningStock(@RequestParam("cat_id") int cat_id,@RequestParam("vendId") int vendId) {
 
 		List<OpeningStockModel> OpeningStockModel = new ArrayList<OpeningStockModel>();
 //System.out.println("Inside getAllitemOpeningStock");
 		try {
 
-			OpeningStockModel = addOpeningStock.getIteminfoOPeningStock(cat_id);
+			OpeningStockModel = addOpeningStock.getIteminfoOPeningStock(cat_id,vendId);
 
 		} catch (Exception e) {
 
