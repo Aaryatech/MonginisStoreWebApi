@@ -22,7 +22,8 @@ public interface CurrentDamageDetailRepository extends JpaRepository<CurrentDama
 	List<CurrentDamageDetail> damageDetail(@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
 	@Query(value=("Select\n" + 
-			"            t_damage.item_id,SUM(t_damage.qty) AS damage_qty , SUM(t_damage.qty*t_damage.value) as damage_value \n" + 
+			"            t_damage.item_id,SUM(t_damage.qty) AS damage_qty , SUM(t_damage.qty*t_damage.value) as damage_value,"
+			+ "SUM(t_damage.qty*t_damage.float1) as damage_landing_value \n" + 
 			"        FROM\n" + 
 			"            t_damage,m_item  \n" + 
 			"        WHERE\n" + 

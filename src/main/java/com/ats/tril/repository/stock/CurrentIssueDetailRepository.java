@@ -29,7 +29,7 @@ public interface CurrentIssueDetailRepository extends JpaRepository<CurrentIssue
 	List<CurrentIssueDetail> issueDetail(@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
 	@Query(value=("Select\n" + 
-			"            item_issue_detail.item_id,SUM(item_issue_detail.item_issue_qty) as issue_qty,SUM(item_issue_detail.item_issue_qty*po_detail.item_rate) as issue_landing_value,SUM((po_detail.landing_cost/po_detail.item_qty)*item_issue_detail.item_issue_qty) as issue_qty_value \n" + 
+			"            item_issue_detail.item_id,SUM(item_issue_detail.item_issue_qty) as issue_qty,SUM(item_issue_detail.item_issue_qty*po_detail.item_rate) as issue_qty_value,SUM((po_detail.landing_cost/po_detail.item_qty)*item_issue_detail.item_issue_qty) as issue_landing_value \n" + 
 			"        FROM\n" + 
 			"            item_issue_header,\n" + 
 			"            item_issue_detail,\n" + 
@@ -47,7 +47,7 @@ public interface CurrentIssueDetailRepository extends JpaRepository<CurrentIssue
 	List<CurrentIssueDetail> issueDetailByCatId(@Param("fromDate")String fromDate,@Param("toDate") String toDate,@Param("catId") int catId);
 
 	@Query(value=("Select\n" + 
-			"            item_issue_detail.item_id,SUM(item_issue_detail.item_issue_qty) as issue_qty,SUM(item_issue_detail.item_issue_qty*po_detail.item_rate) as issue_landing_value,SUM((po_detail.landing_cost/po_detail.item_qty)*item_issue_detail.item_issue_qty) as issue_qty_value \n" + 
+			"            item_issue_detail.item_id,SUM(item_issue_detail.item_issue_qty) as issue_qty,SUM(item_issue_detail.item_issue_qty*po_detail.item_rate) as issue_qty_value,SUM((po_detail.landing_cost/po_detail.item_qty)*item_issue_detail.item_issue_qty) as issue_landing_value \n" + 
 			"        FROM\n" + 
 			"            item_issue_header,\n" + 
 			"            item_issue_detail,\n" + 

@@ -27,7 +27,7 @@ public interface CurrentMrnDetailRepository extends JpaRepository<CurrentMrnDeta
 	List<CurrentMrnDetail> mrnDetail(@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
 	@Query(value=("Select\n" + 
-			"            t_mrn_detail.item_id,SUM(t_mrn_detail.approve_qty) as approve_qty,SUM(po_detail.item_rate*t_mrn_detail.approve_qty) as approved_landing_value,SUM((po_detail.landing_cost/po_detail.item_qty)*t_mrn_detail.approve_qty)  as approved_qty_value\n" + 
+			"            t_mrn_detail.item_id,SUM(t_mrn_detail.approve_qty) as approve_qty,SUM(po_detail.item_rate*t_mrn_detail.approve_qty) as approved_qty_value,SUM((po_detail.landing_cost/po_detail.item_qty)*t_mrn_detail.approve_qty)  as approved_landing_value\n" + 
 			"        FROM\n" + 
 			"            t_mrn_detail,\n" + 
 			"            t_mrn_header,\n" + 
@@ -44,7 +44,7 @@ public interface CurrentMrnDetailRepository extends JpaRepository<CurrentMrnDeta
 	List<CurrentMrnDetail> mrnDetailByCatId(@Param("fromDate") String fromDate,@Param("toDate") String toDate,@Param("catId") int catId);
 
 	@Query(value=("Select\n" + 
-			"            t_mrn_detail.item_id,SUM(t_mrn_detail.approve_qty) as approve_qty,SUM(po_detail.item_rate*t_mrn_detail.approve_qty) as approved_landing_value,SUM((po_detail.landing_cost/po_detail.item_qty)*t_mrn_detail.approve_qty)  as approved_qty_value\n" + 
+			"            t_mrn_detail.item_id,SUM(t_mrn_detail.approve_qty) as approve_qty,SUM(po_detail.item_rate*t_mrn_detail.approve_qty) as approved_qty_value,SUM((po_detail.landing_cost/po_detail.item_qty)*t_mrn_detail.approve_qty)  as approved_landing_value\n" + 
 			"        FROM\n" + 
 			"            t_mrn_detail,\n" + 
 			"            t_mrn_header,\n" + 

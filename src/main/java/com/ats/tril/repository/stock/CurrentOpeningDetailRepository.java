@@ -25,7 +25,7 @@ public interface CurrentOpeningDetailRepository extends JpaRepository<CurrentOpe
 	@Query(value=(" Select\n" + 
 			"        t_stock_detail.item_id,\n" + 
 			"        SUM(t_stock_detail.op_stock_qty) as opening_stock,\n" + 
-			"        SUM(t_stock_detail.op_stock_value) as op_stock_value           \n" + 
+			"        SUM(t_stock_detail.op_stock_value) as op_stock_value,SUM(t_stock_detail.gatepass_value) as op_landing_value \n" + 
 			"    FROM\n" + 
 			"        t_stock_detail,\n" + 
 			"        t_stock_header,\n" + 
