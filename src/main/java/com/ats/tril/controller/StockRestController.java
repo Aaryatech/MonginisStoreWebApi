@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ats.tril.model.CurrentDamageDetail;
+import com.ats.tril.model.CurrentIssueDetail;
+import com.ats.tril.model.CurrentMrnDetail;
+import com.ats.tril.model.CurrentOpeningDetail;
 import com.ats.tril.model.GetCurrentStock;
 import com.ats.tril.model.GetItem;
 import com.ats.tril.model.ItemListWithCurrentStock;
@@ -20,10 +24,14 @@ import com.ats.tril.model.MinAndRolLevelReport;
 import com.ats.tril.model.OpeningStockModel;
 import com.ats.tril.model.StockDetail;
 import com.ats.tril.model.StockHeader;
-import com.ats.tril.repository.AddOpeningStock;
+import com.ats.tril.repository.AddOpeningStock; 
 import com.ats.tril.repository.GetItemRepository;
 import com.ats.tril.repository.ItemListWithCurrentStockRepository;
 import com.ats.tril.repository.MinAndRolLevelReportRepository;
+import com.ats.tril.repository.stock.CurrentDamageDetailRepository;
+import com.ats.tril.repository.stock.CurrentIssueDetailRepository;
+import com.ats.tril.repository.stock.CurrentMrnDetailRepository;
+import com.ats.tril.repository.stock.CurrentOpeningDetailRepository;
 import com.ats.tril.repository.stock.GetCurrentStockHeaderRepository;
 import com.ats.tril.repository.stock.StockDetailRepository;
 import com.ats.tril.repository.stock.StockHeaderRepository; 
@@ -52,6 +60,18 @@ public class StockRestController {
 	
 	@Autowired
 	AddOpeningStock addOpeningStock;
+	
+	@Autowired
+	CurrentOpeningDetailRepository currentOpeningDetailRepository;
+	
+	@Autowired
+	CurrentMrnDetailRepository currentMrnDetailRepository;
+
+	@Autowired
+	CurrentIssueDetailRepository currentIssueDetailRepository;
+	
+	@Autowired
+	CurrentDamageDetailRepository currentDamageDetailRepository;
 
 	@RequestMapping(value = { "/insertStock" }, method = RequestMethod.POST)
 	public @ResponseBody StockHeader insertStock(@RequestBody StockHeader stockHeader) {
@@ -77,7 +97,7 @@ public class StockRestController {
 
 	}
 	
-	@RequestMapping(value = { "/getCurrentStock" }, method = RequestMethod.POST)
+	/*@RequestMapping(value = { "/getCurrentStock" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetCurrentStock> getCurrentStock(@RequestParam("fromDate") String fromDate,
 			@RequestParam("toDate") String toDate) {
 		
@@ -86,6 +106,83 @@ public class StockRestController {
 		try {
 
 			getCurrentStock = getCurrentStockHeaderRepository.getCurrentStock(fromDate,toDate);
+ 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return getCurrentStock;
+
+	}*/
+	
+	@RequestMapping(value = { "/getCurrentStock" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetCurrentStock> getCurrentStock(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate) {
+		
+		List<GetCurrentStock> getCurrentStock = new ArrayList<GetCurrentStock>();
+
+		try {
+
+			/*getCurrentStock = getCurrentStockHeaderRepository.getCurrentStock(fromDate,toDate);*/
+			
+			getCurrentStock = getCurrentStockHeaderRepository.getCurrentStockItem();
+			
+			List<CurrentOpeningDetail> opningDetail = currentOpeningDetailRepository.opningDetail(fromDate);
+			
+			List<CurrentMrnDetail> mrnDetail = currentMrnDetailRepository.mrnDetail(fromDate,toDate);
+			
+			List<CurrentIssueDetail> issueDetail = currentIssueDetailRepository.issueDetail(fromDate,toDate);
+			
+			List<CurrentDamageDetail> damageDetail = currentDamageDetailRepository.damageDetail(fromDate,toDate);
+			
+			
+			for(int i=0 ; i<getCurrentStock.size(); i++) {
+				
+				for(int j=0 ; j<opningDetail.size() ;j++) {
+					
+					if(opningDetail.get(j).getItemId()==getCurrentStock.get(i).getItemId()) {
+						
+						getCurrentStock.get(i).setOpeningStock(opningDetail.get(j).getOpeningStock());
+						getCurrentStock.get(i).setOpStockValue(opningDetail.get(j).getOpStockValue());
+						getCurrentStock.get(i).setOpLandingValue(opningDetail.get(j).getOpLandingValue());
+						break;
+					}
+				}
+				
+				for(int j=0 ; j<mrnDetail.size() ;j++) {
+					
+					if(mrnDetail.get(j).getItemId()==getCurrentStock.get(i).getItemId()) {
+						
+						getCurrentStock.get(i).setApproveQty(mrnDetail.get(j).getApproveQty());
+						getCurrentStock.get(i).setApprovedQtyValue(mrnDetail.get(j).getApprovedQtyValue());
+						getCurrentStock.get(i).setApprovedLandingValue(mrnDetail.get(j).getApprovedLandingValue());
+						break;
+					}
+				}
+				
+				for(int j=0 ; j<issueDetail.size() ;j++) {
+					
+					if(issueDetail.get(j).getItemId()==getCurrentStock.get(i).getItemId()) {
+						
+						getCurrentStock.get(i).setIssueQty(issueDetail.get(j).getIssueQty());
+						getCurrentStock.get(i).setIssueQtyValue(issueDetail.get(j).getIssueQtyValue());
+						getCurrentStock.get(i).setIssueLandingValue(issueDetail.get(j).getIssueLandingValue());
+						break;
+					}
+				}
+				
+				for(int j=0 ; j<damageDetail.size() ;j++) {
+					
+					if(damageDetail.get(j).getItemId()==getCurrentStock.get(i).getItemId()) {
+						
+						getCurrentStock.get(i).setDamageQty(damageDetail.get(j).getDamageQty());
+						getCurrentStock.get(i).setDamagValue(damageDetail.get(j).getDamagValue());
+						getCurrentStock.get(i).setDamageLandingValue(damageDetail.get(j).getDamageLandingValue());
+						break;
+					}
+				}
+			}
  
 		} catch (Exception e) {
 

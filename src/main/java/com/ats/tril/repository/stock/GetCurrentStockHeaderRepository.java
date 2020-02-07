@@ -428,4 +428,31 @@ public interface GetCurrentStockHeaderRepository extends JpaRepository<GetCurren
 			"        0) AS damage_landing_value,coalesce(0) as  gatepass_return_qty,coalesce(0) as  gatepass_qty FROM m_item where m_item.is_used=1 and  m_item.item_id=:itemId"),nativeQuery=true)
 	 GetCurrentStock getCurrentStockByItemId(@Param("fromDate")String fromDate,
 			 @Param("toDate")String toDate,@Param("itemId") int itemId); 
+	
+	
+	@Query(value=("SELECT\r\n" + 
+			"        m_item.item_id,\r\n" + 
+			"        CONCAT(m_item.item_code,\r\n" + 
+			"        ' ',\r\n" + 
+			"        m_item.item_desc) as item_code,\r\n" + 
+			"        coalesce( 0) AS opening_stock,"
+			+ " 0 as op_landing_value,\r\n" + 
+			"        coalesce(  0) AS op_stock_value,\r\n" + 
+			"        coalesce( 0) AS approve_qty,\r\n" + 
+			"        coalesce( 0) AS approved_landing_value,\r\n" + 
+			"        coalesce( 0) AS approved_qty_value,\r\n" + 
+			"        coalesce( 0) AS issue_qty,\r\n" + 
+			"        coalesce( 0) AS issue_landing_value,\r\n" + 
+			"        coalesce( 0) AS issue_qty_value,\r\n" + 
+			"        coalesce( 0)  AS return_issue_qty,\r\n" + 
+			"        coalesce( 0) AS damage_qty,\r\n" + 
+			"        coalesce( 0) AS damage_value,"
+			+ "0 as damage_landing_value,\r\n" + 
+			"        coalesce(0) AS gatepass_qty,\r\n" + 
+			"        coalesce(0) AS gatepass_return_qty \r\n" + 
+			"    FROM\r\n" + 
+			"        m_item \r\n" + 
+			"    where\r\n" + 
+			"        m_item.is_used=1"),nativeQuery=true)
+	List<GetCurrentStock> getCurrentStockItem();
 }
