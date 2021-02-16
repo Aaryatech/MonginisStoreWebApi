@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ats.tril.model.AccountHead;
+import com.ats.tril.model.ApproveBy;
 import com.ats.tril.model.Category;
 import com.ats.tril.model.Company;
 import com.ats.tril.model.DeliveryTerms;
@@ -40,6 +41,7 @@ import com.ats.tril.model.User;
 import com.ats.tril.model.Vendor;
 import com.ats.tril.model.VendorListForRateVarification;
 import com.ats.tril.repository.AccountHeadRepository;
+import com.ats.tril.repository.ApproveByRepo;
 import com.ats.tril.repository.CategoryRepository;
 import com.ats.tril.repository.CompanyRepository;
 import com.ats.tril.repository.DeliveryTermsRepository;
@@ -1834,6 +1836,85 @@ public class MasterController {
 		}
 		return errorMessage;
 
+	}
+
+	@Autowired
+	ApproveByRepo aprvRepo;
+	@RequestMapping(value = { "/saveVendorApproveBy" }, method = RequestMethod.POST)
+	public @ResponseBody ApproveBy saveVendorApproveBy(@RequestBody ApproveBy approve) {
+
+		ApproveBy res = new ApproveBy();
+
+		try {
+
+			res = aprvRepo.saveAndFlush(approve);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return res;
+
+	}
+	
+	@RequestMapping(value = { "/getApproveByList" }, method = RequestMethod.GET)
+	public @ResponseBody List<ApproveBy> getApproveByList() {
+
+		List<ApproveBy> res = new ArrayList<ApproveBy>();
+
+		try {
+
+			res = aprvRepo.findByDelStatusOrderByApprovByIdDesc(0);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return res;
+
+	}
+	
+	@RequestMapping(value = { "/getApproveByInfoById" }, method = RequestMethod.POST)
+	public @ResponseBody ApproveBy getApproveByInfoById(@RequestParam("apprvId") int apprvId) {
+
+		ApproveBy res = new ApproveBy();
+
+		try {
+
+			res = aprvRepo.findByApprovById(apprvId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return res;
+	}
+	
+	@RequestMapping(value = { "/deleteApproveBy" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage deleteApproveBy(@RequestParam("apprvId") int apprvId) {
+
+		ErrorMessage errorMessage = new ErrorMessage();
+
+		try {
+			int delete = aprvRepo.deleteApproveBy(apprvId);
+			if (delete == 1) {
+				errorMessage.setError(false);
+				errorMessage.setMessage(" Deleted Successfully");
+			} else {
+				errorMessage.setError(true);
+				errorMessage.setMessage("Deletion Failed");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			errorMessage.setError(true);
+			errorMessage.setMessage("Deletion Failed :EXC");
+
+		}
+		return errorMessage;
 	}
 
 }
