@@ -12,5 +12,8 @@ public interface MrnReportDetailRepo extends JpaRepository<MrnReportDetail, Inte
 
 	@Query(value = "SELECT d.*,i.item_desc,i.item_code ,i.item_uom FROM  t_mrn_detail d ,m_item i WHERE d.del_status=1 AND d.mrn_id IN(:mrnIdList)  AND i.item_id=d.item_id   ", nativeQuery = true)
 	List<MrnReportDetail> getMrnDetailReportList(@Param("mrnIdList") List<Integer> mrnIdList);
+	
+	@Query(value = "SELECT d.*,i.item_desc,i.item_code ,i.item_uom FROM  t_office_mrn_detail d ,m_item i WHERE d.del_status=1 AND d.mrn_id IN(:mrnIdList)  AND i.item_id=d.item_id   ", nativeQuery = true)
+	List<MrnReportDetail> getOfficeMrnDetailReportList(@Param("mrnIdList") List<Integer> mrnIdList);
 
 }

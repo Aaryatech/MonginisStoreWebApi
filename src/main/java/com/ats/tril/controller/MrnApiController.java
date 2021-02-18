@@ -22,6 +22,8 @@ import com.ats.tril.model.mrn.GetMrnHeaderRej;
 import com.ats.tril.model.mrn.MrnDetail;
 import com.ats.tril.model.mrn.MrnHeader;
 import com.ats.tril.model.mrn.MrnReport;
+import com.ats.tril.model.mrn.OfficeMrnDetail;
+import com.ats.tril.model.mrn.OfficeMrnHeader;
 import com.ats.tril.model.mrn.PoItemForMrnEdit;
 import com.ats.tril.model.rejection.RejectionMemo;
 import com.ats.tril.model.rejection.RejectionMemoDetail;
@@ -35,6 +37,8 @@ import com.ats.tril.repository.mrn.GetMrnHeaderRepository;
 import com.ats.tril.repository.mrn.MrnDetailRepo;
 import com.ats.tril.repository.mrn.MrnHeaderRepository;
 import com.ats.tril.repository.mrn.MrnReportRepo;
+import com.ats.tril.repository.mrn.OfficeMrnDetailRepo;
+import com.ats.tril.repository.mrn.OfficeMrnHeaderRepository;
 import com.ats.tril.repository.mrn.PoItemForMrnEditRepo;
 import com.sun.org.apache.bcel.internal.util.SyntheticRepository;
 
@@ -372,6 +376,36 @@ public class MrnApiController {
 
 			}else {
 			mrnHeaderList = getMrnHeaderRepository.getMrnHeaderByDate(grnType,fromDate, toDate);
+			}
+			System.err.println("mrn Head List by Date =  " + mrnHeaderList.toString());
+
+		} catch (Exception e) {
+
+			System.err.println("Exception in getMrnHeaderByDate Mrn  " + e.getMessage());
+
+			e.printStackTrace();
+
+		}
+
+		return mrnHeaderList;
+
+	}
+	
+	@RequestMapping(value = { "/getOfficeMrnHeaderByDate" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetMrnHeader> getOfficeMrnHeaderByDate(@RequestParam("grnType")int grnType,@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate) {
+
+		List<GetMrnHeader> mrnHeaderList = new ArrayList<GetMrnHeader>();
+
+		try {
+			
+			if(grnType==-1) {
+				System.err.println("Grn type ==-1 on page load call");
+				
+				mrnHeaderList = getMrnHeaderRepository.getOfficeMrnHeaderByDate(fromDate, toDate);
+
+			}else {
+			mrnHeaderList = getMrnHeaderRepository.getOfficeMrnHeaderByDate(grnType,fromDate, toDate);
 			}
 			System.err.println("mrn Head List by Date =  " + mrnHeaderList.toString());
 
@@ -832,5 +866,225 @@ public class MrnApiController {
 		return errorMessage;
 
 	}
+	
+	@Autowired OfficeMrnDetailRepo officMrnDtlRepo;
+	@Autowired OfficeMrnHeaderRepository officeMrnHeadRepo;
+	@RequestMapping(value = { "/saveOfficeMrnHeadAndDetail" }, method = RequestMethod.POST)
+	public @ResponseBody OfficeMrnHeader saveOfficeMrnHeadAndDetail(@RequestBody OfficeMrnHeader mrnHeader) {
+		System.err.println("inside web api save saveMrnHeadAndDetail");
+		OfficeMrnHeader res = new OfficeMrnHeader();
 
+		try {
+
+			res = officeMrnHeadRepo.saveAndFlush(mrnHeader);
+
+			List<OfficeMrnDetail> mrnDetailList = mrnHeader.getMrnDetailList();
+
+			int mrnId = res.getMrnId();
+			String mrnNo = res.getMrnNo();
+			String batchNo;
+
+			for (int i = 0; i < mrnDetailList.size(); i++) {
+
+				OfficeMrnDetail detail = mrnDetailList.get(i);
+
+				GetItem item = getItemRepository.getItemByItemId(detail.getItemId());
+				batchNo = new String();
+				batchNo = mrnNo + "-" + item.getItemCode();
+
+				detail.setBatchNo(batchNo);
+
+				detail.setMrnId(mrnId);
+				OfficeMrnDetail mrnDetailRes = officMrnDtlRepo.save(detail);
+
+				PoDetail poDetail = poDetailRepo.findByPoDetailId(mrnDetailRes.getPoDetailId());
+
+				if (mrnDetailRes != null) {
+					float remainingQty = 0;
+
+					if (detail.getMrnQtyBeforeEdit() == -1) {
+
+						System.err.println("Inside mrn qty before Edit ==-1");
+
+						remainingQty = poDetail.getPendingQty() - mrnDetailRes.getMrnQty();
+
+					} else {
+
+						System.err.println("Inside mrn qty before edit is greater than 0");
+						remainingQty = poDetail.getPendingQty()
+								- (mrnDetailRes.getMrnQty()-detail.getMrnQtyBeforeEdit());
+
+					}
+
+					poDetail.setPendingQty(remainingQty);
+					int status = 1;
+
+					if (remainingQty <= 0) {
+						System.err.println("Pending qty =0 keeping status=2");
+						status = 2;
+					}
+
+					poDetail.setStatus(status);
+					PoDetail poDetailStatusUpdate = poDetailRepo.save(poDetail);
+					 
+					List<Integer> stss = new ArrayList<Integer>();
+					stss.add(2);
+					stss.add(9);
+					stss.add(7);
+					List<PoDetail> poDetailsList = poDetailRepo.findAllByStatusNotInAndPoId(stss, mrnDetailList.get(i).getPoId());
+
+					if (poDetailsList.isEmpty()) {
+
+						System.err.println("Po Detail list is Empty so Update po Header Status for POId "
+								+ mrnDetailList.get(i).getPoId());
+
+						int updatePoHeaderStatus = poHeaderRepository.updateResponsePoHead(2, mrnDetailList.get(i).getPoId());
+
+					}
+					else {
+						List<Integer> sts = new ArrayList<Integer>();
+						sts.add(0);
+						sts.add(1);
+							List<PoDetail> details=poDetailRepo.findAllByPoIdAndStatusNotIn(mrnDetailList.get(i).getPoId(),sts);
+							poDetailsList=new ArrayList<PoDetail>();
+							
+							poDetailsList = poDetailRepo.findAllByStatusAndPoId(1, mrnDetailList.get(i).getPoId());
+		
+						if(poDetailsList.isEmpty()) {
+		
+							int updatePoHeaderStatus = poHeaderRepository.updateResponsePoHead(0, mrnDetailList.get(i).getPoId());
+		
+						}
+						else {
+							int updatePoHeaderStatus = poHeaderRepository.updateResponsePoHead(1, mrnDetailList.get(i).getPoId());
+						}
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("Exception in saving Office Mrn Header and Detail  " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return res;
+	}
+
+	@RequestMapping(value = { "/getOfficeMrnDetailByMrnId" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetMrnDetail> getOfficeMrnDetailByMrnId(@RequestParam("mrnId") int mrnId) {
+
+		List<GetMrnDetail> mrnDetailList = new ArrayList<GetMrnDetail>();
+
+		try {
+			mrnDetailList = getMrnDetailRepository.getOfficeMrnDetailByMrnId(mrnId);
+			System.err.println("mrn mrnDetailList List by MrnId =  " + mrnDetailList.toString());
+
+		} catch (Exception e) {
+
+			System.err.println("Exception in getMrnDetailByMrnId Mrn  " + e.getMessage());
+
+			e.printStackTrace();
+
+		}
+
+		return mrnDetailList;
+
+	}
+	
+	@RequestMapping(value = { "/deleteOfficeMrnHeader" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage deleteOfficeMrnHeader(@RequestParam("mrnId") int mrnId) {
+		System.err.println("inside web api  deleteOfficeMrnHeader");
+		ErrorMessage errMsg = new ErrorMessage();
+
+		try {
+
+			int delRes = officeMrnHeadRepo.deleteMrnHeader(mrnId);
+			List<OfficeMrnDetail> mrnDetailList = officMrnDtlRepo.findByMrnIdAndDelStatus(mrnId,1);
+			
+			System.err.println("Mrn detail in deleteMrnHeader " +mrnDetailList.toString() );
+			
+
+			for (int i = 0; i < mrnDetailList.size(); i++) {
+
+				PoDetail poDetail = poDetailRepo.findByPoDetailId(mrnDetailList.get(i).getPoDetailId());
+				//
+
+				float remainingQty = 0;
+
+				remainingQty = poDetail.getPendingQty() + mrnDetailList.get(i).getMrnQty();
+
+				poDetail.setPendingQty(remainingQty);
+				
+				int status = 1;
+
+				if (remainingQty <= 0) {
+					System.err.println("Pending qty =0 keeping status=2");
+					status = 2;
+				}else  if(remainingQty==poDetail.getItemQty()){
+					
+					status=0;
+				}
+ 
+				poDetail.setStatus(status);
+				PoDetail poDetailStatusUpdate = poDetailRepo.save(poDetail);
+				List<Integer> stss = new ArrayList<Integer>();
+				stss.add(2);
+				stss.add(9);
+				stss.add(7);
+				List<PoDetail> poDetailsList = poDetailRepo.findAllByStatusNotInAndPoId(stss, mrnDetailList.get(i).getPoId());
+
+				if (poDetailsList.isEmpty()) {
+
+					System.err.println("Po Detail list is Empty so Update po Header Status for POId "
+							+ mrnDetailList.get(i).getPoId());
+
+					int updatePoHeaderStatus = poHeaderRepository.updateResponsePoHead(2, mrnDetailList.get(i).getPoId());
+
+				}
+				else {
+					List<Integer> sts = new ArrayList<Integer>();
+					sts.add(0);
+					sts.add(1);
+						List<PoDetail> details=poDetailRepo.findAllByPoIdAndStatusNotIn(mrnDetailList.get(i).getPoId(),sts);
+						poDetailsList=new ArrayList<PoDetail>();
+						
+						poDetailsList = poDetailRepo.findAllByStatusAndPoId(1, mrnDetailList.get(i).getPoId());
+	
+					if(poDetailsList.isEmpty()) {
+	
+						int updatePoHeaderStatus = poHeaderRepository.updateResponsePoHead(0, mrnDetailList.get(i).getPoId());
+	
+					}
+					else {
+						int updatePoHeaderStatus = poHeaderRepository.updateResponsePoHead(1, mrnDetailList.get(i).getPoId());
+					}
+				}
+				
+					
+
+				//
+
+			}
+
+			if (delRes > 0) {
+				errMsg.setError(false);
+				errMsg.setMessage("Mrn Header deleted Successfull");
+			} else {
+				errMsg.setError(true);
+				errMsg.setMessage("Mrn Header delete failed ");
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("Exception in deleteMrnHeader  " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return errMsg;
+	}
 }

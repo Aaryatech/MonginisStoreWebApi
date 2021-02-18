@@ -217,6 +217,40 @@ public class ReportApiController {
 		return mrnList;
 
 	}
+	
+	@RequestMapping(value = { "/getAllOfficeMrnListHeaderDetailReport" }, method = RequestMethod.POST)
+	public @ResponseBody List<MrnReport> getAllOfficeMrnListHeaderDetailReport(
+
+			@RequestParam("mrnIdList") List<Integer> mrnIdList) {
+
+		List<MrnReport> mrnList = new ArrayList<MrnReport>();
+
+		try {
+
+			mrnList = mrnReportrepo.getOfficeHeaderMrnReportList(mrnIdList);
+
+			List<MrnReportDetail> list = mrnReportDetailRepo.getOfficeMrnDetailReportList(mrnIdList);
+
+			for (int i = 0; i < mrnList.size(); i++) {
+				List<MrnReportDetail> listRes = new ArrayList<>();
+				for (int j = 0; j < list.size(); j++) {
+					if (mrnList.get(i).getMrnId() == list.get(j).getMrnId()) {
+						listRes.add(list.get(j));
+					}
+				}
+				mrnList.get(i).setMrnReportDetailList(listRes);
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return mrnList;
+
+	}
+
 
 	@RequestMapping(value = { "/getIssueHeaderDetailReport" }, method = RequestMethod.POST)
 	public @ResponseBody List<IssueReport> getIssueHeaderDetailReport(
